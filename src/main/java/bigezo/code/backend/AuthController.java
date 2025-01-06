@@ -1,6 +1,5 @@
-package bigezo.code.backend.controllers;
+package bigezo.code.backend;
 
-import bigezo.code.backend.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
