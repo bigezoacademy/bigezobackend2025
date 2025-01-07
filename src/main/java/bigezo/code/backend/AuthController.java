@@ -2,11 +2,16 @@ package bigezo.code.backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -22,14 +27,20 @@ public class AuthController {
     @Autowired
     private SchoolAdminRepository schoolAdminRepository;
 
-
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Helper method to create a consistent response body
+    private Map<String, Object> createResponse(boolean success, String message, Object data) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", success);
+        response.put("message", message);
+        response.put("data", data);
+        return response;
+    }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
         try {
             String username = loginRequest.getUsername();
             String password = loginRequest.getPassword();
@@ -41,51 +52,64 @@ public class AuthController {
             // Check if user exists in the database
             if (user == null) {
                 logger.warn("User not found: {}", username);
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(createResponse(false, "Invalid credentials", null));
             }
-
-            logger.info("User found, checking password for: {}", username);
 
             // Check if password matches the hashed password
             if (passwordEncoder.matches(password, user.getPassword())) {
                 logger.info("Password matches for user: {}", username);
-                return jwtUtil.generateToken(user.getUsername());
+                String token = jwtUtil.generateToken(user.getUsername());
+                return ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(createResponse(true, "Login successful", token));
             } else {
                 logger.warn("Invalid password for user: {}", username);
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(createResponse(false, "Invalid credentials", null));
             }
-        } catch (ResponseStatusException e) {
-            logger.error("Login failed due to invalid credentials for user: {}", loginRequest.getUsername(), e);
-            throw e; // Re-throw the exception after logging
         } catch (Exception e) {
             logger.error("Unexpected error during login for user: {}", loginRequest.getUsername(), e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred during login", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(createResponse(false, "An error occurred during login", null));
         }
     }
-
 
     @PostMapping("/registerschool")
-    public String registerSchoolAdmin(@RequestBody SchoolAdmin schoolAdmin) {
-        // Check if adminUsername already exists in SchoolAdmin
-        if (schoolAdminRepository.existsByAdminUsername(schoolAdmin.getAdminUsername())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Admin username already exists");
+    public ResponseEntity<Map<String, Object>> registerSchoolAdmin(@RequestBody SchoolAdmin schoolAdmin) {
+        try {
+            // Check if adminUsername already exists in SchoolAdmin
+            if (schoolAdminRepository.existsByAdminUsername(schoolAdmin.getAdminUsername())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(createResponse(false, "Admin username already exists", null));
+            }
+
+            // Hash the password
+            String hashedPassword = passwordEncoder.encode(schoolAdmin.getAdminPassword());
+            schoolAdmin.setAdminPassword(hashedPassword);
+
+            // Set default role
+            schoolAdmin.setRole("admin");
+
+            // Save the school admin
+            schoolAdminRepository.save(schoolAdmin);
+
+            // Create a corresponding User for authentication
+            User user = new User(schoolAdmin.getAdminUsername(), hashedPassword, "ROLE_ADMIN");
+            userRepository.save(user);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(createResponse(true, "School admin registered successfully!", null));
+        } catch (Exception e) {
+            logger.error("Unexpected error during school admin registration", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(createResponse(false, "An error occurred during registration", null));
         }
-
-        // Hash the password
-        String hashedPassword = passwordEncoder.encode(schoolAdmin.getAdminPassword());
-        schoolAdmin.setAdminPassword(hashedPassword);
-
-        // Set default role
-        schoolAdmin.setRole("admin");
-
-        // Save the school admin
-        schoolAdminRepository.save(schoolAdmin);
-
-        // Create a corresponding User for authentication
-        User user = new User(schoolAdmin.getAdminUsername(), hashedPassword, "ROLE_ADMIN");
-        userRepository.save(user);
-
-        return "School admin registered successfully!";
     }
-
 }
