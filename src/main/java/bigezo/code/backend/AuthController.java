@@ -61,12 +61,15 @@ public class AuthController {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 logger.info("Password matches for user: {}", username);
                 String token = jwtUtil.generateToken(user.getUsername());
-                System.out.println("-------------------------------"+token);
+                Map<String, Object> responseData = new HashMap<>();
+                responseData.put("token", token);
+                responseData.put("role", user.getRoles()); // Include role in the response
+                responseData.put("userId",user.getId());
                 return ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_JSON)
-                        .body(createResponse(true, "Login successful", token));
-
-            } else {
+                        .body(createResponse(true, "Login successful", responseData));
+            }
+            else {
                 logger.warn("Invalid password for user: {}", username);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .contentType(MediaType.APPLICATION_JSON)
