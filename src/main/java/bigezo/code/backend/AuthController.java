@@ -51,7 +51,7 @@ public class AuthController {
 
             // Check if user exists in the database
             if (user == null) {
-                logger.warn("User not found: {}", username);
+                logger.warn("User not found:"+username+"---", username);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(createResponse(false, "Invalid credentials", null));
@@ -61,9 +61,11 @@ public class AuthController {
             if (passwordEncoder.matches(password, user.getPassword())) {
                 logger.info("Password matches for user: {}", username);
                 String token = jwtUtil.generateToken(user.getUsername());
+                System.out.println("-------------------------------"+token);
                 return ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(createResponse(true, "Login successful", token));
+
             } else {
                 logger.warn("Invalid password for user: {}", username);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

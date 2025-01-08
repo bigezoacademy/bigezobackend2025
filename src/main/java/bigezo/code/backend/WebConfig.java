@@ -10,10 +10,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/auth/registerschool")
-                .allowedOrigins("http://localhost:4200") // Frontend URL
+        registry.addMapping("/auth/login")
+                .allowedOrigins("*") // Frontend URL
                 .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowCredentials(false);
     }
 }
