@@ -1,6 +1,5 @@
 package bigezo.code.backend;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -11,14 +10,15 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/auth/**")
-                .allowedOrigins("*") // Frontend URL
+                .allowedOrigins("http://localhost:4200")  // Your frontend URL
                 .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .allowCredentials(false);
-        registry.addMapping("/api/**")
-                .allowedOrigins("*") // Frontend URL
+                .allowCredentials(true);  // Allow cookies or credentials (such as tokens)
+
+        registry.addMapping("/api/requirements/**")
+                .allowedOrigins("http://localhost:4200")  // Your frontend URL
                 .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
                 .allowedHeaders("*")
-                .allowCredentials(false);
+                .allowCredentials(true);  // Allow cookies or credentials
     }
 }

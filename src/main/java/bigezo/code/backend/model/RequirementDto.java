@@ -8,13 +8,13 @@ public class RequirementDto {
     private String description;
     private Double unitCost;
     private String level;
-    private String term;
+    private Integer term;  // This field should be Integer
     private Integer year;
     private SchoolAdminDto schoolAdmin;
 
     // Constructor
     public RequirementDto(Long id, String item, String description, Double unitCost, String level,
-                          String term, Integer year, SchoolAdminDto schoolAdmin) {
+                          Integer term, Integer year, SchoolAdminDto schoolAdmin) {
         this.id = id;
         this.item = item;
         this.description = description;
@@ -66,11 +66,11 @@ public class RequirementDto {
         this.level = level;
     }
 
-    public String getTerm() {
+    public Integer getTerm() {
         return term;
     }
 
-    public void setTerm(String term) {
+    public void setTerm(Integer term) {  // Corrected to accept Integer, not String
         this.term = term;
     }
 

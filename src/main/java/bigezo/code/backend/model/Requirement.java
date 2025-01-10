@@ -15,7 +15,7 @@ public class Requirement {
     private String description;
     private Double unitCost;
     private String level; // Use 'level' if 'class' is reserved
-    private String term;
+    private Integer term; // Changed to Integer to represent an integer value
     private Integer year;
 
     @ManyToOne
@@ -64,11 +64,11 @@ public class Requirement {
         this.level = level;
     }
 
-    public String getTerm() {
+    public Integer getTerm() {  // Corrected to return Integer instead of String
         return term;
     }
 
-    public void setTerm(String term) {
+    public void setTerm(Integer term) {  // Corrected to accept Integer as input
         this.term = term;
     }
 

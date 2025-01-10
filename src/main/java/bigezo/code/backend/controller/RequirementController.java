@@ -22,8 +22,11 @@ public class RequirementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RequirementDto>> getAllRequirements() {
-        List<RequirementDto> requirements = requirementService.getAllRequirements();
+    public ResponseEntity<List<RequirementDto>> getAllRequirements(@RequestParam(name = "year") int year,
+                                                                   @RequestParam(name = "level") String level,
+                                                                   @RequestParam(name = "term") int term) {
+        List<RequirementDto> requirements = requirementService.getRequirementsByFilters(year, level, term);
+        //List<RequirementDto> allrequirements = requirementService.getAllRequirements();
         return ResponseEntity.ok(requirements);
     }
 

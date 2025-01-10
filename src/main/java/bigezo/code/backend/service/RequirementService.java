@@ -1,6 +1,5 @@
 package bigezo.code.backend.service;
 
-
 import bigezo.code.backend.SchoolAdminDto;
 import bigezo.code.backend.model.Requirement;
 import bigezo.code.backend.model.RequirementDto;
@@ -20,6 +19,14 @@ public class RequirementService {
     @Autowired
     public RequirementService(RequirementRepository requirementRepository) {
         this.requirementRepository = requirementRepository;
+    }
+
+    // Fetch requirements by year, level, and term
+    public List<RequirementDto> getRequirementsByFilters(int year, String level, int term) {
+        List<Requirement> requirements = requirementRepository.findByYearAndLevelAndTerm(year, level, term);
+        return requirements.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     public List<RequirementDto> getAllRequirements() {

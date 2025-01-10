@@ -69,6 +69,7 @@ public class AuthController {
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(createResponse(true, "Login successful", responseData));
             }
+
             else {
                 logger.warn("Invalid password for user: {}", username);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -117,4 +118,6 @@ public class AuthController {
                     .body(createResponse(false, "An error occurred during registration", null));
         }
     }
+
+
 }

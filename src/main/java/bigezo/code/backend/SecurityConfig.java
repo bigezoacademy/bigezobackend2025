@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -23,13 +24,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Allow unauthenticated access to /auth
-                        .requestMatchers("/error").permitAll() // Allow unauthenticated access to /error
-                        .requestMatchers(HttpMethod.GET, "/api/requirements/**").permitAll() // Allow GET requests for all users
-                        .requestMatchers(HttpMethod.POST, "/api/requirements/**").hasRole("ADMIN") // Only allow POST for admins
-                        .requestMatchers(HttpMethod.PUT, "/api/requirements/**").hasRole("ADMIN") // Only allow PUT for admins
-                        .requestMatchers(HttpMethod.DELETE, "/api/requirements/**").hasRole("ADMIN") // Only allow DELETE for admins
-                        .anyRequest().authenticated() // All other endpoints require authentication
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/requirements/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/requirements/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/requirements/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/requirements/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()  // Allow OPTIONS request without authentication
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
