@@ -10,11 +10,12 @@ public class RequirementDto {
     private String level;
     private Integer term;  // This field should be Integer
     private Integer year;
+    private Integer quantity; // New field added for quantity
     private SchoolAdminDto schoolAdmin;
 
     // Constructor
     public RequirementDto(Long id, String item, String description, Double unitCost, String level,
-                          Integer term, Integer year, SchoolAdminDto schoolAdmin) {
+                          Integer term, Integer year, Integer quantity, SchoolAdminDto schoolAdmin) {
         this.id = id;
         this.item = item;
         this.description = description;
@@ -22,6 +23,7 @@ public class RequirementDto {
         this.level = level;
         this.term = term;
         this.year = year;
+        this.quantity = quantity;  // Initialize quantity
         this.schoolAdmin = schoolAdmin;
     }
 
@@ -70,7 +72,7 @@ public class RequirementDto {
         return term;
     }
 
-    public void setTerm(Integer term) {  // Corrected to accept Integer, not String
+    public void setTerm(Integer term) {
         this.term = term;
     }
 
@@ -80,6 +82,14 @@ public class RequirementDto {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public Integer getQuantity() {  // Getter for quantity
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {  // Setter for quantity
+        this.quantity = quantity;
     }
 
     public SchoolAdminDto getSchoolAdmin() {

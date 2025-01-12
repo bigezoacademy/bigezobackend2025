@@ -22,39 +22,56 @@ public class RequirementController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RequirementDto>> getAllRequirements(@RequestParam(name = "year") int year,
-                                                                   @RequestParam(name = "level") String level,
-                                                                   @RequestParam(name = "term") int term) {
-        List<RequirementDto> requirements = requirementService.getRequirementsByFilters(year, level, term);
-        //List<RequirementDto> allrequirements = requirementService.getAllRequirements();
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<List<RequirementDto>> getAllRequirements(
+            @RequestParam(name = "schoolAdminId") Long schoolAdminId,
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "level", required = false) String level,
+            @RequestParam(name = "term", required = false) Integer term) {
+        List<RequirementDto> requirements;
+        if (year != null && level != null && term != null) {
+            requirements = requirementService.getRequirementsByFilters(schoolAdminId, year, level, term);
+        } else {
+            requirements = requirementService.getAllRequirements(schoolAdminId);
+        }
         return ResponseEntity.ok(requirements);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RequirementDto> getRequirementById(@PathVariable Long id) {
-        return requirementService.getRequirementById(id)
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<RequirementDto> getRequirementById(
+            @RequestParam(name = "schoolAdminId") Long schoolAdminId,
+            @PathVariable Long id) {
+        return requirementService.getRequirementById(schoolAdminId, id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RequirementDto> createRequirement(@RequestBody Requirement requirement) {
-        RequirementDto createdRequirement = requirementService.createRequirement(requirement);
+    public ResponseEntity<RequirementDto> createRequirement(
+            @RequestParam(name = "schoolAdminId") Long schoolAdminId,
+            @RequestBody Requirement requirement) {
+        RequirementDto createdRequirement = requirementService.createRequirement(schoolAdminId, requirement);
         return ResponseEntity.ok(createdRequirement);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<RequirementDto> updateRequirement(@PathVariable Long id, @RequestBody Requirement requirement) {
-        RequirementDto updatedRequirement = requirementService.updateRequirement(id, requirement);
+    public ResponseEntity<RequirementDto> updateRequirement(
+            @RequestParam(name = "schoolAdminId") Long schoolAdminId,
+            @PathVariable Long id,
+            @RequestBody Requirement requirement) {
+        RequirementDto updatedRequirement = requirementService.updateRequirement(schoolAdminId, id, requirement);
         return ResponseEntity.ok(updatedRequirement);
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteRequirement(@PathVariable Long id) {
-        requirementService.deleteRequirement(id);
+    public ResponseEntity<Void> deleteRequirement(
+            @RequestParam(name = "schoolAdminId") Long schoolAdminId,
+            @PathVariable Long id) {
+        requirementService.deleteRequirement(schoolAdminId, id);
         return ResponseEntity.noContent().build();
     }
 }

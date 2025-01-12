@@ -17,6 +17,7 @@ public class Requirement {
     private String level; // Use 'level' if 'class' is reserved
     private Integer term; // Changed to Integer to represent an integer value
     private Integer year;
+    private Integer quantity; // New field added for quantity
 
     @ManyToOne
     @JoinColumn(name = "school_admin_id", referencedColumnName = "id", nullable = false)
@@ -64,11 +65,11 @@ public class Requirement {
         this.level = level;
     }
 
-    public Integer getTerm() {  // Corrected to return Integer instead of String
+    public Integer getTerm() {
         return term;
     }
 
-    public void setTerm(Integer term) {  // Corrected to accept Integer as input
+    public void setTerm(Integer term) {
         this.term = term;
     }
 
@@ -86,5 +87,15 @@ public class Requirement {
 
     public void setSchoolAdmin(SchoolAdmin schoolAdmin) {
         this.schoolAdmin = schoolAdmin;
+    }
+
+    // Getter and Setter for quantity
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }
