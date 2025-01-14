@@ -17,7 +17,7 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    public static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     private JwtUtil jwtUtil;

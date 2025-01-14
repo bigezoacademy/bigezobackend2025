@@ -71,7 +71,9 @@ public class RequirementController {
     public ResponseEntity<Void> deleteRequirement(
             @RequestParam(name = "schoolAdminId") Long schoolAdminId,
             @PathVariable Long id) {
+        // Ensure the parameter order matches the method in the service
         requirementService.deleteRequirement(schoolAdminId, id);
         return ResponseEntity.noContent().build();
     }
+
 }
