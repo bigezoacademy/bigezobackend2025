@@ -54,11 +54,17 @@ public class StudentController {
         return ResponseEntity.ok(createdStudent);
     }
 
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<StudentDto> updateStudent(@PathVariable Long id, @RequestBody Student student) {
-        return ResponseEntity.ok(studentService.updateStudent(id, student));
+    public ResponseEntity<StudentDto> updateStudent(
+            @RequestParam(name = "schoolAdminId") Long schoolAdminId,
+            @PathVariable Long id,
+            @RequestBody Student student) {
+        StudentDto updatedStudent = studentService.updateStudent(schoolAdminId, id, student);
+        return ResponseEntity.ok(updatedStudent);
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

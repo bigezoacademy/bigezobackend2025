@@ -51,8 +51,8 @@ public class StudentService {
         return convertToDto(savedStudent);
     }
 
-    public StudentDto updateStudent(Long id, Student updatedStudent) {
-        Student existingStudent = studentRepository.findById(id)
+    public StudentDto updateStudent(Long schoolAdminId,Long id, Student updatedStudent) {
+        Student existingStudent = studentRepository.findByIdAndSchoolAdminId(id, schoolAdminId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + id));
 
         existingStudent.setFirstName(updatedStudent.getFirstName());
