@@ -1,5 +1,8 @@
 package bigezo.code.backend;
 
+import bigezo.code.backend.model.Student;
+import bigezo.code.backend.model.StudentLoginRequest;
+import bigezo.code.backend.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,6 +29,8 @@ public class AuthController {
     private UserRepository userRepository;
     @Autowired
     private SchoolAdminRepository schoolAdminRepository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -119,5 +124,45 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/student-login")
+    public ResponseEntity<Map<String, Object>> studentLogin(@RequestBody StudentLoginRequest studentloginRequest) {
+        try {
+            String studentNumber = studentloginRequest.getStudentNumber();
+            String password = studentloginRequest.getPassword();
+
+            logger.info("Attempting to login student: {}", studentNumber);
+
+            Student student = studentRepository.findByStudentNumber(studentNumber);
+
+            if (student == null) {
+                logger.warn("Student not found: {}", studentNumber);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(createResponse(false, "Invalid credentials", null));
+            }
+
+            if (passwordEncoder.matches(password, student.getPassword())) {
+                logger.info("Password matches for student: {}", studentNumber);
+                String token = jwtUtil.generateToken(student.getStudentNumber());
+
+                Map<String, Object> responseData = new HashMap<>();
+                responseData.put("token", token);
+                responseData.put("studentId", student.getId());
+                responseData.put("schoolAdminId", student.getSchoolAdmin().getId()); // Include schoolAdminId
+                responseData.put("firstName", student.getFirstName()); // Include first name
+                responseData.put("lastName", student.getLastName());   // Include last name
+
+                return ResponseEntity.ok()
+                        .body(createResponse(true, "Login successful", responseData));
+            } else {
+                logger.warn("Invalid password for student: {}", studentNumber);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(createResponse(false, "Invalid credentials", null));
+            }
+        } catch (Exception e) {
+            logger.error("Unexpected error during login for student: {}", studentloginRequest.getStudentNumber(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createResponse(false, "An error occurred during login", null));
+        }
+    }
 
 }
