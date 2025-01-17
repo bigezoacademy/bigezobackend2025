@@ -27,5 +27,15 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
+
+
+        registry.addMapping("/api/payment-status/**")
+                .allowedOrigins("http://localhost:4200")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow all CRUD operations
+                .allowedHeaders("*")
+                .allowCredentials(true);
+
+
+
     }
 }

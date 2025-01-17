@@ -24,9 +24,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // Public APIs
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/auth/student-login").permitAll()
+
+                        // API for requirements
                         .requestMatchers(HttpMethod.GET, "/api/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/requirements/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/requirements/**").hasRole("ADMIN")
@@ -39,7 +42,16 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/students/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/students/**").hasRole("ADMIN")
 
+                        // Permissions for payment-status APIs
+                        .requestMatchers(HttpMethod.GET, "/api/payment-status/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/payment-status/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/payment-status/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/payment-status/**").hasRole("ADMIN")
+
+                        // Allow all OPTIONS requests (for CORS preflight)
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Catch-all for other requests
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
