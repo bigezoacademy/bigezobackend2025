@@ -24,36 +24,30 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Public APIs
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/error").permitAll()
-                        .requestMatchers("/auth/student-login").permitAll()
+                        // Public endpoints
+                        .requestMatchers("/auth/**", "/error", "/auth/student-login").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // API for requirements
+                        // Pesapal API endpoints (protected with API Key, not JWT)
+                        .requestMatchers(HttpMethod.POST, "/api/pesapal/**").permitAll()  // Allow all requests to these endpoints
+                        .requestMatchers(HttpMethod.GET, "/api/pesapal/payment-status/**").permitAll()
+
+                        // Requirements API endpoints
                         .requestMatchers(HttpMethod.GET, "/api/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/requirements/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/requirements/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/requirements/**").hasRole("ADMIN")
 
-                        // Permissions for student APIs
-                        .requestMatchers(HttpMethod.GET, "/api/students").hasAnyRole("USER", "ADMIN")
+                        // Student API endpoints
                         .requestMatchers(HttpMethod.GET, "/api/students/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/students/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/students/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/students/**").hasRole("ADMIN")
 
-                        // Permissions for payment-status APIs
-                        .requestMatchers(HttpMethod.GET, "/api/payment-status/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/payment-status/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/payment-status/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/payment-status/**").hasRole("ADMIN")
-
-                        // Allow all OPTIONS requests (for CORS preflight)
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
-                        // Catch-all for other requests
+                        // Catch-all for authenticated requests
                         .anyRequest().authenticated()
                 )
+                // No JWT authentication filter for Pesapal endpoints, since we're using API key
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

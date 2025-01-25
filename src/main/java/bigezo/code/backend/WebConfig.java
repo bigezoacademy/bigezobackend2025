@@ -8,34 +8,10 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // Authentication and requirements mappings
-        registry.addMapping("/auth/**")
+        registry.addMapping("/**") // Allow all paths
                 .allowedOrigins("http://localhost:4200")
                 .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
                 .allowedHeaders("*")
                 .allowCredentials(true);
-
-        registry.addMapping("/api/requirements/**")
-                .allowedOrigins("http://localhost:4200")
-                .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .allowCredentials(true);
-
-        // Add CORS for student APIs
-        registry.addMapping("/api/students/**")
-                .allowedOrigins("http://localhost:4200")
-                .allowedMethods("POST", "OPTIONS", "GET", "PUT", "DELETE")
-                .allowedHeaders("*")
-                .allowCredentials(true);
-
-
-        registry.addMapping("/api/payment-status/**")
-                .allowedOrigins("http://localhost:4200")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow all CRUD operations
-                .allowedHeaders("*")
-                .allowCredentials(true);
-
-
-
     }
 }
