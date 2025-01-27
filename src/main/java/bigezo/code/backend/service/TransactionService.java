@@ -52,6 +52,11 @@ public class TransactionService {
         transactionRepository.deleteById(id);
     }
 
+    public Optional<TransactionDto> getTransactionByOrderTrackingId(String orderTrackingId) {
+        return transactionRepository.findByOrderTrackingId(orderTrackingId)
+                .map(this::mapToDto);
+    }
+
     private TransactionDto mapToDto(Transaction transaction) {
         TransactionDto dto = new TransactionDto();
 

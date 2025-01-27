@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -21,10 +22,10 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/admin/{schoolAdminId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TransactionDto>> getAllTransactions(
-            @RequestParam(name = "schoolAdminId") Long schoolAdminId) {
+            @PathVariable Long schoolAdminId) {
         List<TransactionDto> transactions = transactionService.getAllTransactions(schoolAdminId);
         return ResponseEntity.ok(transactions);
     }
@@ -38,6 +39,15 @@ public class TransactionController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/track/{orderTrackingId}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<TransactionDto> getTransactionByOrderTrackingId(
+            @PathVariable String orderTrackingId) {
+        Optional<TransactionDto> transactionDto = transactionService.getTransactionByOrderTrackingId(orderTrackingId);
+        return transactionDto.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
