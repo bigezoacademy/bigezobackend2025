@@ -119,7 +119,6 @@ public class StudentService {
                 student.getFather(),
                 student.getPhone(),
                 student.getEmail(),
-                student.getPassword(), // You may want to omit the password from the DTO in production
                 student.getEnrollmentStatus(),
                 student.getYear(),
                 student.getSchoolAdmin() != null ? student.getSchoolAdmin().getId() : null

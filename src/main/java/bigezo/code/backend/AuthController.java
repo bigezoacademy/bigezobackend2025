@@ -150,7 +150,7 @@ public class AuthController {
                 responseData.put("schoolAdminId", student.getSchoolAdmin().getId()); // Include schoolAdminId
                 responseData.put("firstName", student.getFirstName()); // Include first name
                 responseData.put("lastName", student.getLastName());   // Include last name
-
+                responseData.put("level",student.getLevel());
                 return ResponseEntity.ok()
                         .body(createResponse(true, "Login successful", responseData));
             } else {

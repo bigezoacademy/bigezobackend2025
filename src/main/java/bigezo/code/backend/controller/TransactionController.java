@@ -22,6 +22,17 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+
+    @GetMapping("/pesapal-status/{trackingId}")
+    public ResponseEntity<String> getPesapalTransactionStatus(
+            @RequestParam String bearerToken,
+            @PathVariable String trackingId) {
+        System.out.println("FAILED TOKEN-----------"+bearerToken);
+        return transactionService.getPesapalTransactionStatus(bearerToken, trackingId);
+    }
+
+
+
     @GetMapping("/admin/{schoolAdminId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<TransactionDto>> getAllTransactions(

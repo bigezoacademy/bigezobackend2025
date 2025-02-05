@@ -26,7 +26,7 @@ public class StudentDto {
     public StudentDto(Long id, String firstName, String lastName, String level, String club,
                       String healthStatus, String studentNumber, LocalDate birthDate, String residence,
                       String mother, String father, String phone, String email, String password,
-                      String enrollmentStatus, Integer year, Long schoolAdminId) {
+                      Integer year, Long schoolAdminId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -4,7 +4,9 @@ import bigezo.code.backend.model.Transaction;
 import bigezo.code.backend.repository.TransactionRepository;
 import bigezo.code.backend.model.TransactionDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,9 +17,37 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
 
+    //@Autowired
+    //public TransactionService(TransactionRepository transactionRepository) {
+     //   this.transactionRepository = transactionRepository;
+    //}
+
+    private final RestTemplate restTemplate;
+
     @Autowired
     public TransactionService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
+        this.restTemplate = new RestTemplate(); // Initialize RestTemplate
+    }
+
+
+    public ResponseEntity<String> getPesapalTransactionStatus(String bearerToken, String trackingId) {
+        String url = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId=" + trackingId;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(bearerToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            System.out.println("Pesapal Response-------: " + response.getBody()); // Print response in JSON format
+            return response;
+        } catch (Exception e) {
+            System.out.println("PESAPAL ERROR ----------------: " + e.getMessage()); // Log error in console
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
+        }
     }
 
     public List<TransactionDto> getAllTransactions(Long schoolAdminId) {
