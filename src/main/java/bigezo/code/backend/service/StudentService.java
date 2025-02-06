@@ -43,28 +43,23 @@ public class StudentService {
     }
 
     public StudentDto createStudent(Long schoolAdminId, Student student) {
-        // Fetch the SchoolAdmin entity by schoolAdminId
         SchoolAdmin schoolAdmin = schoolAdminRepository.findById(schoolAdminId)
                 .orElseThrow(() -> new IllegalArgumentException("SchoolAdmin not found with id: " + schoolAdminId));
 
-        // Set the SchoolAdmin entity in the Student
         student.setSchoolAdmin(schoolAdmin);
 
         // Hash the password before saving
         String hashedPassword = passwordEncoder.encode(student.getPassword());
         student.setPassword(hashedPassword);
 
-        // Save the student entity
         Student savedStudent = studentRepository.save(student);
         return convertToDto(savedStudent);
     }
 
     public StudentDto updateStudent(Long schoolAdminId, Long id, Student updatedStudent) {
-        // Find the existing student by ID and SchoolAdmin ID
         Student existingStudent = studentRepository.findByIdAndSchoolAdminId(id, schoolAdminId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + id));
 
-        // Update fields
         existingStudent.setFirstName(updatedStudent.getFirstName());
         existingStudent.setLastName(updatedStudent.getLastName());
         existingStudent.setLevel(updatedStudent.getLevel());
@@ -80,13 +75,11 @@ public class StudentService {
         existingStudent.setEnrollmentStatus(updatedStudent.getEnrollmentStatus());
         existingStudent.setYear(updatedStudent.getYear());
 
-        // Hash the password if it is being updated
         if (updatedStudent.getPassword() != null && !updatedStudent.getPassword().isEmpty()) {
             String hashedPassword = passwordEncoder.encode(updatedStudent.getPassword());
             existingStudent.setPassword(hashedPassword);
         }
 
-        // Save the updated student entity
         Student savedStudent = studentRepository.save(existingStudent);
         return convertToDto(savedStudent);
     }
@@ -99,12 +92,6 @@ public class StudentService {
     }
 
     private StudentDto convertToDto(Student student) {
-        SchoolAdminDto schoolAdminDto = new SchoolAdminDto(
-                student.getSchoolAdmin().getId(),
-                student.getSchoolAdmin().getSchoolName(),
-                student.getSchoolAdmin().getDistrict()
-        );
-
         return new StudentDto(
                 student.getId(),
                 student.getFirstName(),

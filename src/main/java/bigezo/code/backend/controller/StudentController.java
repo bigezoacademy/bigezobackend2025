@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -39,9 +40,12 @@ public class StudentController {
         List<StudentDto> students;
         if (year != null && level != null && enrollmentStatus != null) {
             students = studentService.getStudentsByFilters(schoolAdminId, year, level, enrollmentStatus);
+            System.out.println(students);
         } else {
-            students = studentService.getAllStudents(schoolAdminId);
+            students = Collections.emptyList();
+            System.out.println(students);
         }
+
         return ResponseEntity.ok(students);
     }
 

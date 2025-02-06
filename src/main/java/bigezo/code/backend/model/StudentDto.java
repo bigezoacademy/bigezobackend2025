@@ -17,16 +17,13 @@ public class StudentDto {
     private String father;
     private String phone;
     private String email;
-    private String password;
     private String enrollmentStatus;
-    private Integer year;
-    private Long schoolAdminId; // Add this field for the reference to SchoolAdmin
+    private int year;
+    private Long schoolAdminId;
 
-    // Constructor, Getters, and Setters
-    public StudentDto(Long id, String firstName, String lastName, String level, String club,
-                      String healthStatus, String studentNumber, LocalDate birthDate, String residence,
-                      String mother, String father, String phone, String email, String password,
-                      Integer year, Long schoolAdminId) {
+    public StudentDto(Long id, String firstName, String lastName, String level, String club, String healthStatus,
+                      String studentNumber, LocalDate birthDate, String residence, String mother, String father,
+                      String phone, String email, String enrollmentStatus, int year, Long schoolAdminId) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -40,146 +37,57 @@ public class StudentDto {
         this.father = father;
         this.phone = phone;
         this.email = email;
-        this.password = password;
         this.enrollmentStatus = enrollmentStatus;
         this.year = year;
         this.schoolAdminId = schoolAdminId;
     }
 
-    // Getters and Setters for all fields
-    public Long getId() {
-        return id;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+    public String getLevel() { return level; }
+    public void setLevel(String level) { this.level = level; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    public String getClub() { return club; }
+    public void setClub(String club) { this.club = club; }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+    public String getHealthStatus() { return healthStatus; }
+    public void setHealthStatus(String healthStatus) { this.healthStatus = healthStatus; }
 
-    public String getLevel() {
-        return level;
-    }
+    public String getStudentNumber() { return studentNumber; }
+    public void setStudentNumber(String studentNumber) { this.studentNumber = studentNumber; }
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
+    public LocalDate getBirthDate() { return birthDate; }
+    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
 
-    public String getClub() {
-        return club;
-    }
+    public String getResidence() { return residence; }
+    public void setResidence(String residence) { this.residence = residence; }
 
-    public void setClub(String club) {
-        this.club = club;
-    }
+    public String getMother() { return mother; }
+    public void setMother(String mother) { this.mother = mother; }
 
-    public String getHealthStatus() {
-        return healthStatus;
-    }
+    public String getFather() { return father; }
+    public void setFather(String father) { this.father = father; }
 
-    public void setHealthStatus(String healthStatus) {
-        this.healthStatus = healthStatus;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public String getStudentNumber() {
-        return studentNumber;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setStudentNumber(String studentNumber) {
-        this.studentNumber = studentNumber;
-    }
+    public String getEnrollmentStatus() { return enrollmentStatus; }
+    public void setEnrollmentStatus(String enrollmentStatus) { this.enrollmentStatus = enrollmentStatus; }
 
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
+    public Integer getYear() { return year; }
+    public void setYear(Integer year) { this.year = year; }
 
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getResidence() {
-        return residence;
-    }
-
-    public void setResidence(String residence) {
-        this.residence = residence;
-    }
-
-    public String getMother() {
-        return mother;
-    }
-
-    public void setMother(String mother) {
-        this.mother = mother;
-    }
-
-    public String getFather() {
-        return father;
-    }
-
-    public void setFather(String father) {
-        this.father = father;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEnrollmentStatus() {
-        return enrollmentStatus;
-    }
-
-    public void setEnrollmentStatus(String enrollmentStatus) {
-        this.enrollmentStatus = enrollmentStatus;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public Long getSchoolAdminId() {
-        return schoolAdminId;
-    }
-
-    public void setSchoolAdminId(Long schoolAdminId) {
-        this.schoolAdminId = schoolAdminId;
-    }
+    public Long getSchoolAdminId() { return schoolAdminId; }
+    public void setSchoolAdminId(Long schoolAdminId) { this.schoolAdminId = schoolAdminId; }
 }
