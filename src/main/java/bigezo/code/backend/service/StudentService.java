@@ -44,7 +44,7 @@ public class StudentService {
 
     public StudentDto createStudent(Long schoolAdminId, Student student) {
         SchoolAdmin schoolAdmin = schoolAdminRepository.findById(schoolAdminId)
-                .orElseThrow(() -> new IllegalArgumentException("SchoolAdmin not found with id: " + schoolAdminId));
+                .orElseThrow(() -> new IllegalArgumentException("SchoolAdmin not found with ID: " + schoolAdminId));
 
         student.setSchoolAdmin(schoolAdmin);
 
@@ -58,7 +58,7 @@ public class StudentService {
 
     public StudentDto updateStudent(Long schoolAdminId, Long id, Student updatedStudent) {
         Student existingStudent = studentRepository.findByIdAndSchoolAdminId(id, schoolAdminId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Student not found with ID: " + id));
 
         existingStudent.setFirstName(updatedStudent.getFirstName());
         existingStudent.setLastName(updatedStudent.getLastName());
@@ -75,7 +75,7 @@ public class StudentService {
         existingStudent.setEnrollmentStatus(updatedStudent.getEnrollmentStatus());
         existingStudent.setYear(updatedStudent.getYear());
 
-        if (updatedStudent.getPassword() != null && !updatedStudent.getPassword().isEmpty()) {
+        if (updatedStudent.getPassword() != null && !updatedStudent.getPassword().trim().isEmpty()) {
             String hashedPassword = passwordEncoder.encode(updatedStudent.getPassword());
             existingStudent.setPassword(hashedPassword);
         }
@@ -86,7 +86,7 @@ public class StudentService {
 
     public void deleteStudent(Long id) {
         if (!studentRepository.existsById(id)) {
-            throw new IllegalArgumentException("Student not found with id: " + id);
+            throw new IllegalArgumentException("Student not found with ID: " + id);
         }
         studentRepository.deleteById(id);
     }

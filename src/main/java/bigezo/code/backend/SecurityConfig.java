@@ -31,8 +31,7 @@ public class SecurityConfig {
                         // Pesapal API endpoints (protected with API Key, not JWT)
                         .requestMatchers(HttpMethod.POST, "/api/pesapal/**").permitAll()  // Allow all requests to these endpoints
                         .requestMatchers(HttpMethod.GET, "/api/pesapal/payment-status/**").permitAll()
-
-                        // Requirements API endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/sms/send").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/requirements/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/requirements/**").hasRole("ADMIN")
