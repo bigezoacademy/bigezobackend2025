@@ -15,6 +15,7 @@ public class Student {
     private String firstName;
     private String lastName;
     private String level;
+    private String gender;
     private String club;
     private String healthStatus;
     private String studentNumber;
@@ -44,6 +45,14 @@ public class Student {
 
     public String getLevel() { return level; }
     public void setLevel(String level) { this.level = level; }
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
 
     public String getClub() { return club; }
     public void setClub(String club) { this.club = club; }
@@ -65,6 +74,7 @@ public class Student {
 
     public String getFather() { return father; }
     public void setFather(String father) { this.father = father; }
+
 
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }

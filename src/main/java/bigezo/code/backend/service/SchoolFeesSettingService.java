@@ -30,4 +30,7 @@ public class SchoolFeesSettingService {
     public void deleteSetting(Long id) {
         repository.deleteById(id);
     }
+    public Long findIdByYearAndTermAndLevel(int year, int term, String level) {
+        return repository.findIdByYearAndTermAndLevel(year, term, level);
+    }
 }

@@ -29,6 +29,9 @@ public class SchoolFeesDetailsService {
         return repository.saveAll(detailsList);
     }
 
+    public List<SchoolFeesDetails> getDetailsByFeesId(Long feesId) {
+        return repository.findBySchoolFeesSettingId(feesId);
+    }
 
     public void deleteDetails(Long id) {
         repository.deleteById(id);

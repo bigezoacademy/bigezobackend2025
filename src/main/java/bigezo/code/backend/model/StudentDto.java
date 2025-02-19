@@ -19,11 +19,12 @@ public class StudentDto {
     private String email;
     private String enrollmentStatus;
     private int year;
+    private String gender; // Add this line
     private Long schoolAdminId;
 
     public StudentDto(Long id, String firstName, String lastName, String level, String club, String healthStatus,
                       String studentNumber, LocalDate birthDate, String residence, String mother, String father,
-                      String phone, String email, String enrollmentStatus, int year, Long schoolAdminId) {
+                      String phone, String email, String enrollmentStatus, int year, String gender, Long schoolAdminId) { // Add gender parameter
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,6 +40,7 @@ public class StudentDto {
         this.email = email;
         this.enrollmentStatus = enrollmentStatus;
         this.year = year;
+        this.gender = gender; // Initialize gender
         this.schoolAdminId = schoolAdminId;
     }
 
@@ -54,6 +56,7 @@ public class StudentDto {
 
     public String getLevel() { return level; }
     public void setLevel(String level) { this.level = level; }
+
 
     public String getClub() { return club; }
     public void setClub(String club) { this.club = club; }
@@ -87,6 +90,9 @@ public class StudentDto {
 
     public Integer getYear() { return year; }
     public void setYear(Integer year) { this.year = year; }
+
+    public String getGender() { return gender; } // Add getter for gender
+    public void setGender(String gender) { this.gender = gender; } // Add setter for gender
 
     public Long getSchoolAdminId() { return schoolAdminId; }
     public void setSchoolAdminId(Long schoolAdminId) { this.schoolAdminId = schoolAdminId; }

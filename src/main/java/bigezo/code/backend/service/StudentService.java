@@ -108,6 +108,7 @@ public class StudentService {
                 student.getEmail(),
                 student.getEnrollmentStatus(),
                 student.getYear(),
+                student.getGender(),
                 student.getSchoolAdmin() != null ? student.getSchoolAdmin().getId() : null
         );
     }

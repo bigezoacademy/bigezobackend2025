@@ -62,4 +62,10 @@ public class SchoolFeesSettingController {
         service.deleteSetting(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/find")
+    public ResponseEntity<Long> findIdByYearAndTermAndLevel(@RequestParam int year, @RequestParam int term, @RequestParam String level) {
+        Long id = service.findIdByYearAndTermAndLevel(year, term, level);
+        return ResponseEntity.ok(id);
+    }
 }
