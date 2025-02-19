@@ -2,27 +2,22 @@ package bigezo.code.backend.model;
 
 import bigezo.code.backend.SchoolAdmin;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_status")
-public class PaymentStatus {
+@Table(name = "school_fees_setting")
+public class SchoolFeesSetting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String item;
+    private String reason;
+    private String level;
     private String term;
     private String year;
-
-    @ManyToOne
-    @JoinColumn(name = "student_id", referencedColumnName = "id", nullable = false)
-    private Student student;
-
-    private Double amountPaid;
-    private Double balance;
     private Double total;
-    private String status;
+    private LocalDateTime timestamp;
 
     @ManyToOne
     @JoinColumn(name = "school_admin_id", referencedColumnName = "id", nullable = false)
@@ -36,11 +31,18 @@ public class PaymentStatus {
         this.id = id;
     }
 
-    public String getItem() {
-        return item;
+    public String getReason() {
+        return reason;
     }
-    public void setItem(String item) {
-        this.item = item;
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getTerm() {
@@ -57,27 +59,6 @@ public class PaymentStatus {
         this.year = year;
     }
 
-    public Student getStudent() {
-        return student;
-    }
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Double getAmountPaid() {
-        return amountPaid;
-    }
-    public void setAmountPaid(Double amountPaid) {
-        this.amountPaid = amountPaid;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
     public Double getTotal() {
         return total;
     }
@@ -85,11 +66,11 @@ public class PaymentStatus {
         this.total = total;
     }
 
-    public String getStatus() {
-        return status;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public SchoolAdmin getSchoolAdmin() {
