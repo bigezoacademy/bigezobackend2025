@@ -83,4 +83,17 @@ public class SchoolFeesSettingController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/find-by-year-term-level-and-admin")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<Long> findByYearTermLevelSchoolAdminId(@RequestParam int year,@RequestParam int term,@RequestParam String level, @RequestParam Long schoolAdminId) {
+        Long id = service.findByYearTermLevelSchoolAdminId(year,term,level, schoolAdminId);
+        if (!id.equals(null)) {
+            logger.debug("Found SchoolFeesSettings: {}", id);
+            return ResponseEntity.ok(id);
+        } else {
+            logger.debug("No SchoolFeesSettings found for year: {} and term: {} and level: {} and schoolAdminId: {}", year,term,level, schoolAdminId);
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

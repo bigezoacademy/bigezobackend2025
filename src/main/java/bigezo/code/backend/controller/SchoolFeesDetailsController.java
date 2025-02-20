@@ -4,6 +4,7 @@ import bigezo.code.backend.model.SchoolFeesDetails;
 import bigezo.code.backend.service.SchoolFeesDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,12 +17,6 @@ public class SchoolFeesDetailsController {
     @Autowired
     private SchoolFeesDetailsService service;
 
-    @GetMapping
-    public List<SchoolFeesDetails> getAllDetails() {
-        return service.getAllDetails();
-    }
-
-
 
     @PostMapping
     public List<SchoolFeesDetails> createDetails(@RequestBody List<SchoolFeesDetails> detailsList) {
@@ -30,12 +25,14 @@ public class SchoolFeesDetailsController {
 
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteDetails(@PathVariable Long id) {
         service.deleteDetails(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/by-fees-id")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<SchoolFeesDetails> getDetailsByFeesId(@RequestParam Long feesId) {
         return service.getDetailsByFeesId(feesId);
     }
