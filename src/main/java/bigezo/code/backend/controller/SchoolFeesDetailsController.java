@@ -21,11 +21,7 @@ public class SchoolFeesDetailsController {
         return service.getAllDetails();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SchoolFeesDetails> getDetailsById(@PathVariable Long id) {
-        Optional<SchoolFeesDetails> details = service.getDetailsById(id);
-        return details.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+
 
     @PostMapping
     public List<SchoolFeesDetails> createDetails(@RequestBody List<SchoolFeesDetails> detailsList) {

@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+import static bigezo.code.backend.AuthController.logger;
+
 @RestController
 @RequestMapping("/api/school-fees-settings")
 public class SchoolFeesSettingController {
@@ -67,5 +69,18 @@ public class SchoolFeesSettingController {
     public ResponseEntity<Long> findIdByYearAndTermAndLevel(@RequestParam int year, @RequestParam int term, @RequestParam String level) {
         Long id = service.findIdByYearAndTermAndLevel(year, term, level);
         return ResponseEntity.ok(id);
+    }
+
+    @GetMapping("/find-by-year-and-admin")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    public ResponseEntity<List<SchoolFeesSetting>> findByYearAndSchoolAdminId(@RequestParam int year, @RequestParam Long schoolAdminId) {
+        List<SchoolFeesSetting> settings = service.findByYearAndSchoolAdminId(year, schoolAdminId);
+        if (!settings.isEmpty()) {
+            logger.debug("Found SchoolFeesSettings: {}", settings);
+            return ResponseEntity.ok(settings);
+        } else {
+            logger.debug("No SchoolFeesSettings found for year: {} and schoolAdminId: {}", year, schoolAdminId);
+            return ResponseEntity.notFound().build();
+        }
     }
 }

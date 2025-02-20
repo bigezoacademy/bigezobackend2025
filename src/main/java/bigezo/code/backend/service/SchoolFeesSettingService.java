@@ -33,4 +33,7 @@ public class SchoolFeesSettingService {
     public Long findIdByYearAndTermAndLevel(int year, int term, String level) {
         return repository.findIdByYearAndTermAndLevel(year, term, level);
     }
+    public List<SchoolFeesSetting> findByYearAndSchoolAdminId(int year, Long schoolAdminId) {
+        return repository.findByYearAndSchoolAdminId(year, schoolAdminId);
+    }
 }
