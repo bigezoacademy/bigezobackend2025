@@ -5,6 +5,8 @@ import bigezo.code.backend.service.SchoolFeesSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,7 +74,7 @@ public class SchoolFeesSettingController {
     }
 
     @GetMapping("/find-by-year-and-admin")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+
     public ResponseEntity<List<SchoolFeesSetting>> findByYearAndSchoolAdminId(@RequestParam int year, @RequestParam Long schoolAdminId) {
         List<SchoolFeesSetting> settings = service.findByYearAndSchoolAdminId(year, schoolAdminId);
         if (!settings.isEmpty()) {
@@ -85,9 +87,13 @@ public class SchoolFeesSettingController {
     }
 
     @GetMapping("/find-by-year-term-level-and-admin")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+
     public ResponseEntity<Long> findByYearTermLevelSchoolAdminId(@RequestParam int year,@RequestParam int term,@RequestParam String level, @RequestParam Long schoolAdminId) {
         Long id = service.findByYearTermLevelSchoolAdminId(year,term,level, schoolAdminId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ResponseEntity<String> authResponse = testEndpoint(authentication);
+
+        logger.debug("Auth Response: {}", authResponse.getBody());
         if (!id.equals(null)) {
             logger.debug("Found SchoolFeesSettings: {}", id);
             return ResponseEntity.ok(id);
@@ -95,5 +101,10 @@ public class SchoolFeesSettingController {
             logger.debug("No SchoolFeesSettings found for year: {} and term: {} and level: {} and schoolAdminId: {}", year,term,level, schoolAdminId);
             return ResponseEntity.notFound().build();
         }
+
+    }
+
+    public ResponseEntity<String> testEndpoint(Authentication authentication) {
+        return ResponseEntity.ok("Authenticated user: " + authentication.getAuthorities());
     }
 }

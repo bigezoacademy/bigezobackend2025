@@ -44,13 +44,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/transactions/pesapal-status/**").permitAll()
 
                         // School Fees Settings API endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/school-fees-settings/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/school-fees-settings/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/school-fees-settings/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/school-fees-settings/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/school-fees-settings/**").hasRole("ADMIN")
 
                         // School Fees Details API endpoints
-                        .requestMatchers(HttpMethod.GET, "/api/school-fees-details/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/school-fees-details/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/school-fees-details/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/school-fees-details/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/school-fees-details/**").hasRole("ADMIN")
