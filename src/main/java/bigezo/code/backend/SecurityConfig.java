@@ -31,30 +31,38 @@ public class SecurityConfig {
                         // Pesapal API endpoints (protected with API Key, not JWT)
                         .requestMatchers(HttpMethod.POST, "/api/pesapal/**").permitAll()  // Allow all requests to these endpoints
                         .requestMatchers(HttpMethod.GET, "/api/pesapal/payment-status/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/pesapal/transaction-status/**").permitAll() // Added line for transaction-status
+
+
+                        // SMS API (Admin Only)
                         .requestMatchers(HttpMethod.POST, "/api/sms/send").hasRole("ADMIN")
+
+                        // Requirements API (Admin Only)
                         .requestMatchers(HttpMethod.GET, "/api/requirements").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/requirements/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/requirements/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/requirements/**").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/api/transactions/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/transactions/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/transactions/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/transactions/**").hasRole("ADMIN")
+                        // Transactions API
+                        .requestMatchers(HttpMethod.GET, "/api/transactions/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/transactions/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/transactions/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/transactions/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/transactions/pesapal-status/**").permitAll()
 
-                        // School Fees Settings API endpoints
+                        // School Fees Settings API (Admin Only)
                         .requestMatchers(HttpMethod.GET, "/api/school-fees-settings/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/school-fees-settings/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/school-fees-settings/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/school-fees-settings/**").hasRole("ADMIN")
 
-                        // School Fees Details API endpoints
+                        // School Fees Details API (Admin Only)
                         .requestMatchers(HttpMethod.GET, "/api/school-fees-details/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/school-fees-details/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/school-fees-details/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/school-fees-details/**").hasRole("ADMIN")
-                        // Student API endpoints
+
+                        // Students API (User or Admin Access)
                         .requestMatchers(HttpMethod.GET, "/api/students/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/students/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/students/**").hasRole("ADMIN")
@@ -63,8 +71,7 @@ public class SecurityConfig {
                         // Catch-all for authenticated requests
                         .anyRequest().authenticated()
                 )
-                // No JWT authentication filter for Pesapal endpoints, since we're using API key
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT Filter
 
         return http.build();
     }
