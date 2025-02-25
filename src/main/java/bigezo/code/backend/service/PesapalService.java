@@ -1,5 +1,6 @@
 package bigezo.code.backend.service;
 
+import bigezo.code.backend.model.TransactionStatusResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -98,25 +99,28 @@ public class PesapalService {
      * @return Payment status (e.g., "PENDING", "COMPLETED", "FAILED").
      */
 
-    public String getTransactionStatus(String orderTrackingId) throws Exception {
+    public TransactionStatusResponse getTransactionStatus(String orderTrackingId) throws Exception {
         String jwtToken = getJwtToken(); // Fetch JWT Token
-        System.out.println("FETCHED STATUS TOKEN-----------------------"+jwtToken);
+        System.out.println("FETCHED STATUS TOKEN-----------------------" + jwtToken);
+
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + jwtToken);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        String PESAPAL_TRANSACTION_STATUS_URL="https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId=";
+
+        String PESAPAL_TRANSACTION_STATUS_URL = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId=";
         String url = PESAPAL_TRANSACTION_STATUS_URL + orderTrackingId;
 
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(
-                url, HttpMethod.GET, requestEntity, String.class
-        );
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
 
         System.out.println("Transaction Status Response: " + response.getBody());
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // Map the JSON response to the DTO
+            return objectMapper.readValue(response.getBody(), TransactionStatusResponse.class);
         } else {
             throw new Exception("Failed to fetch transaction status. HTTP Status: " + response.getStatusCode());
         }

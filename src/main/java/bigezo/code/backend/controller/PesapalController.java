@@ -1,6 +1,7 @@
 package bigezo.code.backend.controller;
 
 import bigezo.code.backend.PaymentTokenResponse;
+import bigezo.code.backend.model.TransactionStatusResponse;
 import bigezo.code.backend.service.PesapalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,20 +61,18 @@ public class PesapalController {
     @GetMapping("/transaction-status")
     public ResponseEntity<?> getTransactionStatus(@RequestParam String orderTrackingId) {
         try {
-            String response = pesapalService.getTransactionStatus(orderTrackingId);
+            // Call the service to get the transaction status as a DTO (TransactionStatusResponse)
+            TransactionStatusResponse response = pesapalService.getTransactionStatus(orderTrackingId);
 
-            // Print the response to the console
-            System.out.println("Pesapal Transaction Status Response: " + response);
+            // Print the response to the console before returning it
+            System.out.println("Transaction Status Response: " + response);
 
-            // Return a JSON response
-            Map<String, Object> responseBody = new HashMap<>();
-            responseBody.put("orderTrackingId", orderTrackingId);
-            responseBody.put("status", response);
-
-            return ResponseEntity.ok().body(responseBody);
+            // Return the DTO as a JSON response
+            return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             System.out.println("Error fetching transaction status:----- " + e.getMessage());
 
+            // Create an error response map
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", "Failed to fetch transaction status");
             errorResponse.put("message", e.getMessage());
