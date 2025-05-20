@@ -1,7 +1,8 @@
 package bigezo.code.backend.service;
 
 import bigezo.code.backend.dto.PaymentRequestDTO;
-import bigezo.code.backend.model.*;
+import bigezo.code.backend.model.BillingAddress;
+import bigezo.code.backend.model.Payment;
 import bigezo.code.backend.repository.PaymentRepository;
 import okhttp3.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import bigezo.code.backend.model.PaymentStatus;
+import bigezo.code.backend.model.Student;
 import bigezo.code.backend.service.PaymentStatusService;
 import org.springframework.util.StringUtils;
 
@@ -70,20 +73,14 @@ public class PaymentService {
                             
                             // Parse the token response
                             try {
-                                // The response is a JSON object with token and other fields
-                                if (responseBody != null && !responseBody.isEmpty()) {
-                                    // Extract token directly from the JSON string
-                                    String token = responseBody.substring(responseBody.indexOf("token\":") + 7);
-                                    token = token.substring(0, token.indexOf(","));
-                                    token = token.replace("\"", "");
-                                    
-                                    if (token != null && !token.isEmpty()) {
-                                        accessToken = token;
-                                        lastAuthTime = LocalDateTime.now();
-                                        return;
-                                    }
+                                PaymentTokenResponse tokenResponse = objectMapper.readValue(responseBody, PaymentTokenResponse.class);
+                                if (tokenResponse.getStatus().equals("200") && tokenResponse.getError() == null) {
+                                    accessToken = tokenResponse.getToken();
+                                    lastAuthTime = LocalDateTime.now();
+                                    return;
+                                } else {
+                                    throw new IOException("Invalid token response: " + responseBody);
                                 }
-                                throw new IOException("No token found in response: " + responseBody);
                             } catch (Exception e) {
                                 throw new IOException("Failed to parse token response: " + responseBody, e);
                             }

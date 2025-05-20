@@ -1,7 +1,7 @@
 package bigezo.code.backend.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +20,7 @@ public class PaymentStatus {
     private String merchantReference;
     private String redirectUrl;
     private String error;
-    private String pesapalStatus;
+    private String paymentStatus;
     private String orderTrackingId;
     private String currency;
     private Double amount;
@@ -102,12 +102,12 @@ public class PaymentStatus {
         this.error = error;
     }
 
-    public String getPesapalStatus() {
-        return pesapalStatus;
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 
-    public void setPesapalStatus(String pesapalStatus) {
-        this.pesapalStatus = pesapalStatus;
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public String getOrderTrackingId() {

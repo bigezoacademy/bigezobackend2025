@@ -59,7 +59,7 @@ public class PaymentStatusService {
         
         existingStatus.setStatus(status);
         existingStatus.setError(error);
-        existingStatus.setPesapalStatus(pesapalStatus);
+        existingStatus.setPaymentStatus(pesapalStatus);
         existingStatus.setOrderTrackingId(orderTrackingId);
         return paymentStatusRepository.save(existingStatus);
     }

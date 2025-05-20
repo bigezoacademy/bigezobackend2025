@@ -55,7 +55,7 @@ public class PaymentController {
         }
 
         try {
-            String response = paymentService.makePayment(payment);
+            String response = paymentService.makePayment(requestDTO);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             logger.error("Error processing payment request: {}", e.getMessage());
