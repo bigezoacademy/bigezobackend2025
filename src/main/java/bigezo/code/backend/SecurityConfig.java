@@ -28,6 +28,10 @@ public class SecurityConfig {
                         .requestMatchers("/auth/**", "/error", "/auth/student-login").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                        // Payment endpoints
+                        .requestMatchers(HttpMethod.POST, "/api/payments").permitAll()  // Allow all POST requests to payments endpoint
+                        .requestMatchers(HttpMethod.GET, "/api/payments/**").permitAll()
+
                         // Pesapal API endpoints (protected with API Key, not JWT)
                         .requestMatchers(HttpMethod.POST, "/api/pesapal/**").permitAll()  // Allow all requests to these endpoints
                         .requestMatchers(HttpMethod.GET, "/api/pesapal/payment-status/**").permitAll()

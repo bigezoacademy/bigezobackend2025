@@ -1,3 +1,4 @@
+/* <<<<<<<<<<<<<<  ✨ Windsurf Command 🌟 >>>>>>>>>>>>>>>> */
 package bigezo.code.backend.service;
 
 import bigezo.code.backend.model.TransactionStatusResponse;
@@ -107,8 +108,8 @@ public class PesapalService {
         headers.set("Authorization", "Bearer " + jwtToken);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
+        String url = PESAPAL_STATUS_URL + orderTrackingId;
         String PESAPAL_TRANSACTION_STATUS_URL = "https://pay.pesapal.com/v3/api/Transactions/GetTransactionStatus?orderTrackingId=";
-        String url = PESAPAL_TRANSACTION_STATUS_URL + orderTrackingId;
 
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
@@ -126,4 +127,7 @@ public class PesapalService {
         }
     }
 
+
+
 }
+/* <<<<<<<<<<  f153854a-5377-4823-ba28-d93bbf524ba1  >>>>>>>>>>> */
