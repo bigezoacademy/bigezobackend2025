@@ -150,31 +150,45 @@ public class PaymentService {
             logger.info("Payment response received: {}", responseBody);
 
             try {
+                ObjectMapper objectMapper = new ObjectMapper();
                 PaymentResponse paymentResponse = objectMapper.readValue(responseBody, PaymentResponse.class);
 
-                if (paymentResponse.getError() != null) {
-                    throw new IOException("Payment failed: " + paymentResponse.getError().getMessage());
-                }
+                logger.info("Payment response received: {}", paymentResponse);
 
-                if (!"200".equals(paymentResponse.getStatus())) {
-                    throw new IOException("Payment failed with status: " + paymentResponse.getStatus());
-                }
+                // Check if the response is successful
+                if (paymentResponse.getStatus().equals("200") && paymentResponse.getError() == null) {
+                    logger.info("Payment successfully processed");
 
-                // Create a Payment object from the response
-                Payment payment = new Payment();
-                payment.setPesapalId(paymentResponse.getMerchantReference());
-                // Create payment status entry
-                paymentStatusService.createPaymentStatus(
+                    // Create a Payment object from the response
+                    Payment payment = new Payment();
+                    payment.setPesapalId(paymentResponse.getMerchantReference());
+                    payment.setNotificationId(paymentResponse.getOrderTrackingId());
+                    
+                    // Create payment status entry
+                    paymentStatusService.createPaymentStatus(
                         payment,
                         paymentResponse.getMerchantReference(),
                         paymentResponse.getRedirectUrl()
-                );
+                    );
 
-                // Return the redirect URL
-                return paymentResponse.getRedirectUrl();
+                    // Return the full Pesapal response
+                    return objectMapper.writeValueAsString(paymentResponse);
+                } else {
+                    logger.error("Payment failed: {}", paymentResponse.getError());
+                    return objectMapper.writeValueAsString(paymentResponse);
+                }
             } catch (Exception e) {
                 logger.error("Failed to parse payment response: {}", e.getMessage());
-                throw new IOException("Failed to process payment response: " + responseBody);
+                PaymentResponse errorResponse = new PaymentResponse();
+                errorResponse.setStatus("500");
+                
+                PaymentResponse.Error error = new PaymentResponse.Error();
+                error.setErrorType("SYSTEM_ERROR");
+                error.setCode("500");
+                error.setMessage(e.getMessage());
+                errorResponse.setError(error);
+                
+                return objectMapper.writeValueAsString(errorResponse);
             }
         } catch (IOException e) {
             logger.error("Error processing payment request", e);
@@ -195,41 +209,33 @@ public class PaymentService {
         }
     }
 
-    /**
-     * Validate payment request
-     * @param paymentRequest The payment request to validate
-     * @throws IOException if validation fails
-     */
-    private void validatePaymentRequest(Payment paymentRequest) {
-        if (paymentRequest == null) {
+
+    private void validatePaymentRequest(Payment payment) {
+        if (payment == null) {
             throw new IllegalArgumentException("Payment request cannot be null");
         }
 
-        if (paymentRequest.getCurrency() == null || paymentRequest.getCurrency().isEmpty()) {
+        if (payment.getCurrency() == null || payment.getCurrency().isEmpty()) {
             throw new IllegalArgumentException("Currency is required");
         }
 
-        if (paymentRequest.getAmount() == null || paymentRequest.getAmount() <= 0) {
+        if (payment.getAmount() == null || payment.getAmount() <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
         }
 
-        if (paymentRequest.getDescription() == null || paymentRequest.getDescription().isEmpty()) {
+        if (payment.getDescription() == null || payment.getDescription().isEmpty()) {
             throw new IllegalArgumentException("Description is required");
         }
 
-        if (paymentRequest.getCallbackUrl() == null || paymentRequest.getCallbackUrl().isEmpty()) {
+        if (payment.getCallbackUrl() == null || payment.getCallbackUrl().isEmpty()) {
             throw new IllegalArgumentException("Callback URL is required");
         }
 
-        if (paymentRequest.getNotificationId() == null || paymentRequest.getNotificationId().isEmpty()) {
-            throw new IllegalArgumentException("Notification ID is required");
-        }
-
-        if (paymentRequest.getBillingAddress() == null) {
+        if (payment.getBillingAddress() == null) {
             throw new IllegalArgumentException("Billing address is required");
         }
 
-        BillingAddress billingAddress = paymentRequest.getBillingAddress();
+        BillingAddress billingAddress = payment.getBillingAddress();
         if (billingAddress.getEmailAddress() == null || billingAddress.getEmailAddress().isEmpty()) {
             throw new IllegalArgumentException("Billing address email is required");
         }
@@ -246,8 +252,33 @@ public class PaymentService {
             throw new IllegalArgumentException("Billing address first name is required");
         }
 
-        if (billingAddress.getLastName() == null || billingAddress.getLastName().isEmpty()) {
-            throw new IllegalArgumentException("Billing address last name is required");
+        // Make last name, line1, line2, city, state, postal_code, zip_code optional
+        if (billingAddress.getLastName() == null) {
+            billingAddress.setLastName("");
+        }
+
+        if (billingAddress.getLine1() == null) {
+            billingAddress.setLine1("");
+        }
+
+        if (billingAddress.getLine2() == null) {
+            billingAddress.setLine2("");
+        }
+
+        if (billingAddress.getCity() == null) {
+            billingAddress.setCity("");
+        }
+
+        if (billingAddress.getState() == null) {
+            billingAddress.setState("");
+        }
+
+        if (billingAddress.getPostalCode() == null) {
+            billingAddress.setPostalCode("");
+        }
+
+        if (billingAddress.getZipCode() == null) {
+            billingAddress.setZipCode("");
         }
     }
 }

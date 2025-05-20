@@ -47,8 +47,9 @@ public class PaymentStatusService {
             logger.error("Failed to serialize billing address: {}", e.getMessage());
             status.setBillingAddress(null);
         }
-        status.setSchoolAdminId(payment.getSchoolAdminId());
-        status.setStudentId(payment.getStudentId());
+        // Set schoolAdminId and studentId, allowing null values
+        status.setSchoolAdminId(payment.getSchoolAdminId() != null ? payment.getSchoolAdminId() : 0L);
+        status.setStudentId(payment.getStudentId() != null ? payment.getStudentId() : 0L);
         return paymentStatusRepository.save(status);
     }
     
