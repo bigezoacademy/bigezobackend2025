@@ -6,10 +6,14 @@ import bigezo.code.backend.repository.PaymentRepository;
 import okhttp3.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import bigezo.code.backend.model.PaymentResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import bigezo.code.backend.model.PaymentStatus;
+import bigezo.code.backend.model.Student;
+import bigezo.code.backend.service.PaymentStatusService;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -22,7 +26,7 @@ public class PaymentService {
     private static final String PESAPAL_PAYMENT_URL = "https://pay.pesapal.com/v3/api/Transactions/SubmitOrderRequest";
     private static final int MAX_AUTH_RETRIES = 3;
 
-    private final PaymentRepository paymentRepository;
+    private final PaymentStatusService paymentStatusService;
     private String accessToken = "";
     private LocalDateTime lastAuthTime;
 
@@ -35,21 +39,16 @@ public class PaymentService {
     private static final OkHttpClient client = new OkHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public PaymentService(PaymentRepository paymentRepository) {
-        this.paymentRepository = paymentRepository;
+    public PaymentService(PaymentStatusService paymentStatusService) {
+        this.paymentStatusService = paymentStatusService;
         this.lastAuthTime = LocalDateTime.now();
     }
 
-    /**
-     * Authenticate with Pesapal and get access token
-     * @throws IOException if authentication fails
-     */
     private void authenticatePesapal() throws IOException {
         logger.info("Attempting to authenticate with Pesapal...");
 
         if (StringUtils.hasText(consumerKey) && StringUtils.hasText(consumerSecret)) {
-            String authJson = String.format("{\"consumer_key\":\"%s\",\"consumer_secret\":\"%s\"}",
-                    consumerKey, consumerSecret);
+            String authJson = String.format("{\"consumer_key\":\"%s\",\"consumer_secret\":\"%s\"}", consumerKey, consumerSecret);
 
             RequestBody body = RequestBody.create(authJson, MediaType.get("application/json"));
             Request request = new Request.Builder()
@@ -63,7 +62,7 @@ public class PaymentService {
                 if (!response.isSuccessful()) {
                     String errorBody = response.body() != null ? response.body().string() : "No response body";
                     logger.error("Pesapal authentication failed: {} - {}", response.code(), errorBody);
-                    throw new IOException("Failed to authenticate with Pesapal: " + response.code());
+                    throw new IOException("Failed to authenticate with Pesapal: " + response.code() + " - " + errorBody);
                 }
 
                 String responseBody = response.body().string();
@@ -84,7 +83,7 @@ public class PaymentService {
      * @return The saved payment object
      * @throws IOException if payment processing fails
      */
-    public Payment makePayment(Payment paymentRequest) throws IOException {
+    public String makePayment(Payment paymentRequest) throws IOException {
         logger.info("Processing payment request: {}", paymentRequest);
 
         // Validate payment request
@@ -99,10 +98,17 @@ public class PaymentService {
         requestCopy.setCurrency(paymentRequest.getCurrency());
         requestCopy.setAmount(paymentRequest.getAmount());
         requestCopy.setDescription(paymentRequest.getDescription());
-        requestCopy.setCallbackUrl(paymentRequest.getCallbackUrl());
+        requestCopy.setCallbackUrl(paymentRequest.getCallbackUrl()); // Make sure this is not null
         requestCopy.setRedirectMode(paymentRequest.getRedirectMode());
         requestCopy.setNotificationId(paymentRequest.getNotificationId());
         requestCopy.setBranch(paymentRequest.getBranch());
+        requestCopy.setBillingAddress(paymentRequest.getBillingAddress());
+
+        // Validate callback URL
+        if (requestCopy.getCallbackUrl() == null || requestCopy.getCallbackUrl().isEmpty()) {
+            logger.error("Callback URL is required but was not provided");
+            throw new IllegalArgumentException("Callback URL is required");
+        }
 
         // Create a billing address if it's null
         if (paymentRequest.getBillingAddress() == null) {
@@ -157,14 +163,15 @@ public class PaymentService {
                 // Create a Payment object from the response
                 Payment payment = new Payment();
                 payment.setPesapalId(paymentResponse.getMerchantReference());
-                payment.setNotificationId(paymentResponse.getOrderTrackingId());
+                // Create payment status entry
+                paymentStatusService.createPaymentStatus(
+                        payment,
+                        paymentResponse.getMerchantReference(),
+                        paymentResponse.getRedirectUrl()
+                );
 
-                // Save payment details to repository
-                Payment savedPayment = paymentRepository.save(payment);
-                logger.info("Payment successfully processed and saved to database with ID: {}", savedPayment.getDatabaseId());
-
-                // Return the response with the redirect URL
-                return savedPayment;
+                // Return the redirect URL
+                return paymentResponse.getRedirectUrl();
             } catch (Exception e) {
                 logger.error("Failed to parse payment response: {}", e.getMessage());
                 throw new IOException("Failed to process payment response: " + responseBody);

@@ -1,86 +1,45 @@
-package bigezo.code.backend.model;
+package bigezo.code.backend.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 
-@Entity
-@Table(name = "billing_addresses")
-@Data
-public class BillingAddress {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long id;
-
+public class BillingAddressDTO {
     @JsonProperty("email_address")
     private String emailAddress;
-
+    
     @JsonProperty("phone_number")
     private String phoneNumber;
-
+    
     @JsonProperty("country_code")
     private String countryCode;
-
+    
     @JsonProperty("first_name")
     private String firstName;
-
+    
     @JsonProperty("middle_name")
     private String middleName;
-
+    
     @JsonProperty("last_name")
     private String lastName;
-
+    
     @JsonProperty("line_1")
     private String line1;
-
+    
     @JsonProperty("line_2")
     private String line2;
-
+    
     @JsonProperty("city")
     private String city;
-
+    
     @JsonProperty("state")
     private String state;
-
+    
     @JsonProperty("postal_code")
     private String postalCode;
-
+    
     @JsonProperty("zip_code")
     private String zipCode;
 
-    public BillingAddress() {
-    }
-
-    public BillingAddress(String emailAddress, String phoneNumber, String countryCode, String firstName, String middleName, String lastName, String line1, String line2, String city, String state, String postalCode, String zipCode) {
-        this.emailAddress = emailAddress;
-        this.phoneNumber = phoneNumber;
-        this.countryCode = countryCode;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.line1 = line1;
-        this.line2 = line2;
-        this.city = city;
-        this.state = state;
-        this.postalCode = postalCode;
-        this.zipCode = zipCode;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    // Getters and Setters
     public String getEmailAddress() {
         return emailAddress;
     }

@@ -1,63 +1,36 @@
 package bigezo.code.backend.model;
 
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
-@Entity
-@Table(name = "payments")
+@Data
 public class Payment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
-    private Long databaseId; // This will be our internal database ID
-
     @JsonProperty("id")
     private String pesapalId; // This matches Pesapal's JSON structure
 
-    @Column(name = "currency")
-    @JsonProperty("currency")
     private String currency;
-
-    @Column(name = "amount")
-    @JsonProperty("amount")
     private Double amount;
-
-    @Column(name = "description")
-    @JsonProperty("description")
     private String description;
 
-    @Column(name = "callback_url")
     @JsonProperty("callback_url")
     private String callbackUrl;
 
-    @Column(name = "redirect_mode")
-    @JsonProperty("redirect_mode")
     private String redirectMode;
 
-    @Column(name = "notification_id")
     @JsonProperty("notification_id")
     private String notificationId;
 
-    @Column(name = "branch")
-    @JsonProperty("branch")
     private String branch;
 
-    @ManyToOne
-    @JoinColumn(name = "billing_address_id")
+    private Long schoolAdminId;
+
+    private Long studentId;
+
     @JsonProperty("billing_address")
     private BillingAddress billingAddress;
 
-    // Tracking fields - not used for Pesapal API
-    @Transient
-    private Long schoolAdminId;
-
-    @Transient
-    private Long studentId;
-
     public Payment() {
     }
-
     // Getters and Setters
     public Long getDatabaseId() {
         return databaseId;
