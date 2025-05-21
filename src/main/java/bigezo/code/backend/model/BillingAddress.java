@@ -1,23 +1,22 @@
 package bigezo.code.backend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 
 @Entity
 @Table(name = "billing_addresses")
-@Data
 public class BillingAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
+
+    @Column(name = "school_admin_id", nullable = false)
+    private Long schoolAdminId;
+
+    @Column(name = "student_id", nullable = false)
+    private Long studentId;
 
     @JsonProperty("email_address")
     private String emailAddress;
@@ -55,10 +54,16 @@ public class BillingAddress {
     @JsonProperty("zip_code")
     private String zipCode;
 
+    // Constructors
     public BillingAddress() {
     }
 
-    public BillingAddress(String emailAddress, String phoneNumber, String countryCode, String firstName, String middleName, String lastName, String line1, String line2, String city, String state, String postalCode, String zipCode) {
+    public BillingAddress(Long id, Long schoolAdminId, Long studentId, String emailAddress, String phoneNumber,
+                          String countryCode, String firstName, String middleName, String lastName, String line1,
+                          String line2, String city, String state, String postalCode, String zipCode) {
+        this.id = id;
+        this.schoolAdminId = schoolAdminId;
+        this.studentId = studentId;
         this.emailAddress = emailAddress;
         this.phoneNumber = phoneNumber;
         this.countryCode = countryCode;
@@ -73,12 +78,29 @@ public class BillingAddress {
         this.zipCode = zipCode;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getSchoolAdminId() {
+        return schoolAdminId;
+    }
+
+    public void setSchoolAdminId(Long schoolAdminId) {
+        this.schoolAdminId = schoolAdminId;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 
     public String getEmailAddress() {

@@ -2,16 +2,13 @@ package bigezo.code.backend.service;
 
 import bigezo.code.backend.dto.PaymentRequestDTO;
 import bigezo.code.backend.model.*;
-import bigezo.code.backend.repository.PaymentRepository;
 import okhttp3.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import bigezo.code.backend.PaymentTokenResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import bigezo.code.backend.service.PaymentStatusService;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
