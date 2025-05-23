@@ -36,4 +36,11 @@ public class SchoolFeesDetailsController {
     public List<SchoolFeesDetails> getDetailsByFeesId(@RequestParam Long feesId) {
         return service.getDetailsByFeesId(feesId);
     }
+
+    @DeleteMapping("/by-fees-id")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteDetailsByFeesId(@RequestParam Long feesId) {
+        service.deleteDetailsByFeesId(feesId);
+        return ResponseEntity.noContent().build();
+    }
 }
