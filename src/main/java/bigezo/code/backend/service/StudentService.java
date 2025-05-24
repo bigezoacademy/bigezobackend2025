@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +28,14 @@ public class StudentService {
         this.studentRepository = studentRepository;
         this.schoolAdminRepository = schoolAdminRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    public Optional<Student> findByIdAndSchoolAdminId(Long studentId, Long schoolAdminId) {
+        return studentRepository.findByIdAndSchoolAdminId(studentId, schoolAdminId);
+    }
+
+    public Student save(Student student) {
+        return studentRepository.save(student);
     }
 
     public List<StudentDto> getAllStudents(Long schoolAdminId) {
@@ -57,7 +66,7 @@ public class StudentService {
     }
 
     public StudentDto updateStudent(Long schoolAdminId, Long id, Student updatedStudent) {
-        Student existingStudent = studentRepository.findByIdAndSchoolAdminId(id, schoolAdminId)
+        Student existingStudent = findByIdAndSchoolAdminId(id, schoolAdminId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found with ID: " + id));
 
         existingStudent.setFirstName(updatedStudent.getFirstName());

@@ -32,56 +32,65 @@ public class StudentFileService {
     }
 
     /**
-     * Upload additional image 1
+     * Upload additional image
      */
-    public String uploadImage1(MultipartFile file, Student student) throws IOException {
-        return fileService.uploadFile(file, "image1");
-    }
-
-    /**
-     * Upload additional image 2
-     */
-    public String uploadImage2(MultipartFile file, Student student) throws IOException {
-        return fileService.uploadFile(file, "image2");
+    public String uploadImage(MultipartFile file, Student student, int imageNumber) throws IOException {
+        if (imageNumber < 1 || imageNumber > 10) {
+            throw new IllegalArgumentException("Image number must be between 1 and 10");
+        }
+        return fileService.uploadFile(file, "image" + imageNumber);
     }
 
     /**
      * Delete profile picture
      */
     public void deleteProfilePicture(Student student) {
-        if (student.getProfilePictureUrl() != null) {
-            String fileName = extractFileName(student.getProfilePictureUrl());
-            fileService.deleteFile(fileName);
-        }
+        deleteFile(student.getProfilePictureUrl());
     }
 
     /**
      * Delete student video
      */
     public void deleteStudentVideo(Student student) {
-        if (student.getStudentVideoUrl() != null) {
-            String fileName = extractFileName(student.getStudentVideoUrl());
+        deleteFile(student.getStudentVideoUrl());
+    }
+
+    /**
+     * Delete image
+     */
+    public void deleteImage(Student student, int imageNumber) {
+        String url = getImageUrl(student, imageNumber);
+        if (url != null) {
+            deleteFile(url);
+        }
+    }
+
+    /**
+     * Delete file by URL
+     */
+    private void deleteFile(String url) {
+        if (url != null) {
+            String fileName = extractFileName(url);
             fileService.deleteFile(fileName);
         }
     }
 
     /**
-     * Delete image 1
+     * Get image URL by number
      */
-    public void deleteImage1(Student student) {
-        if (student.getImage1Url() != null) {
-            String fileName = extractFileName(student.getImage1Url());
-            fileService.deleteFile(fileName);
-        }
-    }
-
-    /**
-     * Delete image 2
-     */
-    public void deleteImage2(Student student) {
-        if (student.getImage2Url() != null) {
-            String fileName = extractFileName(student.getImage2Url());
-            fileService.deleteFile(fileName);
+    private String getImageUrl(Student student, int imageNumber) {
+        switch (imageNumber) {
+            case 1: return student.getImage1Url();
+            case 2: return student.getImage2Url();
+            case 3: return student.getImage3Url();
+            case 4: return student.getImage4Url();
+            case 5: return student.getImage5Url();
+            case 6: return student.getImage6Url();
+            case 7: return student.getImage7Url();
+            case 8: return student.getImage8Url();
+            case 9: return student.getImage9Url();
+            case 10: return student.getImage10Url();
+            default: return null;
         }
     }
 
