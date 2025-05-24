@@ -59,8 +59,8 @@ public class FileService {
         PutObjectResult result = amazonS3Client.putObject(new PutObjectRequest(bucketName, filePath, file.getInputStream(), metadata)
             .withCannedAcl(CannedAccessControlList.PublicRead));
         
-        // Return the direct S3 URL
-        return String.format("%s/file/%s/%s", endpoint, bucketName, filePath);
+        // Return the friendly URL format
+        return String.format("https://f005.backblazeb2.com/file/%s/%s", bucketName, filePath);
     }
 
     /**
