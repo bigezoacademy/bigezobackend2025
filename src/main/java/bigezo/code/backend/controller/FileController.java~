@@ -1,7 +1,6 @@
 package bigezo.code.backend.controller;
 
 import bigezo.code.backend.service.file.SchoolStorageService;
-import com.amazonaws.services.s3.model.ListObjectsV2Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
