@@ -21,14 +21,14 @@ public class StudentFileService {
      * Upload profile picture for student
      */
     public String uploadProfilePicture(MultipartFile file, Student student) throws IOException {
-        return fileService.uploadFile(file, "profile_picture");
+        return fileService.uploadFile(file, "profile_picture", student);
     }
 
     /**
      * Upload student video
      */
     public String uploadStudentVideo(MultipartFile file, Student student) throws IOException {
-        return fileService.uploadFile(file, "student_video");
+        return fileService.uploadFile(file, "student_video", student);
     }
 
     /**
@@ -38,7 +38,7 @@ public class StudentFileService {
         if (imageNumber < 1 || imageNumber > 10) {
             throw new IllegalArgumentException("Image number must be between 1 and 10");
         }
-        return fileService.uploadFile(file, "image" + imageNumber);
+        return fileService.uploadFile(file, "image" + imageNumber, student);
     }
 
     /**

@@ -1,11 +1,9 @@
 package bigezo.code.backend.service.file;
 
-import bigezo.code.backend.model.Student;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -42,14 +40,8 @@ public class FileService {
             throw new IllegalArgumentException("School admin ID is missing");
         }
         
-        // Create unique file name with timestamp
-        String fileName = String.format("%s_%s_%s.jpg", 
-            fileType, 
-            schoolId, 
-            System.currentTimeMillis());
-        
-        // Create full path with school ID and file type
-        String filePath = String.format("school-%s/students/%s/%s", schoolId, fileType, fileName);
+        // Create path with school ID and file type
+        String filePath = String.format("school-%s/students/%s/", schoolId, fileType);
         
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
