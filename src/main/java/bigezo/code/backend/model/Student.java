@@ -28,6 +28,12 @@ public class Student {
     private String password;
     private String enrollmentStatus;
     private Integer year;
+    
+    // File references
+    private String profilePictureUrl;
+    private String studentVideoUrl;
+    private String image1Url;
+    private String image2Url;
 
     @ManyToOne
     @JoinColumn(name = "school_admin_id", referencedColumnName = "id", nullable = false)
@@ -47,6 +53,38 @@ public class Student {
     public void setLevel(String level) { this.level = level; }
     public String getGender() {
         return gender;
+    }
+    
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+    
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+    
+    public String getStudentVideoUrl() {
+        return studentVideoUrl;
+    }
+    
+    public void setStudentVideoUrl(String studentVideoUrl) {
+        this.studentVideoUrl = studentVideoUrl;
+    }
+    
+    public String getImage1Url() {
+        return image1Url;
+    }
+    
+    public void setImage1Url(String image1Url) {
+        this.image1Url = image1Url;
+    }
+    
+    public String getImage2Url() {
+        return image2Url;
+    }
+    
+    public void setImage2Url(String image2Url) {
+        this.image2Url = image2Url;
     }
 
     public void setGender(String gender) {

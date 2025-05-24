@@ -72,6 +72,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/students/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/students/**").hasRole("ADMIN")
 
+                        // Files API (Admin Only)
+                        .requestMatchers(HttpMethod.POST, "/api/files/upload").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/files/delete/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/files/list").hasRole("ADMIN")
+
                         // Catch-all for authenticated requests
                         .anyRequest().authenticated()
                 )
