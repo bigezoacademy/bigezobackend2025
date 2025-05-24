@@ -59,14 +59,8 @@ public class FileService {
         PutObjectResult result = amazonS3Client.putObject(new PutObjectRequest(bucketName, filePath, file.getInputStream(), metadata)
             .withCannedAcl(CannedAccessControlList.PublicRead));
         
-        // Get the ETag from the response - this contains the Fguid
-        String eTag = result.getETag();
-        
-        // The ETag contains the Fguid in quotes, so we remove them
-        String fguid = eTag.substring(1, eTag.length() - 1);
-        
-        // Return Backblaze B2 native URL format using the Fguid
-        return String.format("https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=%s", fguid);
+        // Return the direct S3 URL
+        return String.format("%s/file/%s/%s", endpoint, bucketName, filePath);
     }
 
     /**
