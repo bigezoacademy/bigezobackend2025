@@ -83,6 +83,7 @@ public class StudentService {
         existingStudent.setEmail(updatedStudent.getEmail());
         existingStudent.setEnrollmentStatus(updatedStudent.getEnrollmentStatus());
         existingStudent.setYear(updatedStudent.getYear());
+        existingStudent.setGender(updatedStudent.getGender());
 
         if (updatedStudent.getPassword() != null && !updatedStudent.getPassword().trim().isEmpty()) {
             String hashedPassword = passwordEncoder.encode(updatedStudent.getPassword());

@@ -141,6 +141,15 @@ public class StudentDto {
     public String getGender() { return gender; } // Add getter for gender
     public void setGender(String gender) { this.gender = gender; } // Add setter for gender
 
+    public String getStudentNumber() { return studentNumber; }
+    public void setStudentNumber(String studentNumber) { this.studentNumber = studentNumber; }
+
+    public LocalDate getBirthDate() { return birthDate; }
+    public void setBirthDate(LocalDate birthDate) { this.birthDate = birthDate; }
+
+    public String getResidence() { return residence; }
+    public void setResidence(String residence) { this.residence = residence; }
+
     // Getters and Setters for file references
     public String getProfilePictureUrl() { return profilePictureUrl; }
     public void setProfilePictureUrl(String profilePictureUrl) { this.profilePictureUrl = profilePictureUrl; }
