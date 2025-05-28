@@ -40,7 +40,11 @@ public class StudentDto {
 
     public StudentDto(Long id, String firstName, String lastName, String level, String club, String healthStatus,
                       String studentNumber, LocalDate birthDate, String residence, String mother, String father,
-                      String phone, String email, String enrollmentStatus, int year, String gender, Long schoolAdminId) {
+                      String phone, String email, String enrollmentStatus, int year, String gender, Long schoolAdminId,
+                      String profilePictureUrl, String studentVideoUrl,
+                      String image1Url, String image2Url, String image3Url, String image4Url,
+                      String image5Url, String image6Url, String image7Url, String image8Url,
+                      String image9Url, String image10Url) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -58,6 +62,18 @@ public class StudentDto {
         this.year = year;
         this.gender = gender;
         this.schoolAdminId = schoolAdminId;
+        this.profilePictureUrl = profilePictureUrl;
+        this.studentVideoUrl = studentVideoUrl;
+        this.image1Url = image1Url;
+        this.image2Url = image2Url;
+        this.image3Url = image3Url;
+        this.image4Url = image4Url;
+        this.image5Url = image5Url;
+        this.image6Url = image6Url;
+        this.image7Url = image7Url;
+        this.image8Url = image8Url;
+        this.image9Url = image9Url;
+        this.image10Url = image10Url;
     }
 
     // Getters and Setters

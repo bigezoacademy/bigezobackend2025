@@ -163,9 +163,32 @@ public class StudentFileController {
             case 2:
                 student.setImage2Url(url);
                 break;
-            // Add cases for image3 through image10
+            case 3:
+                student.setImage3Url(url);
+                break;
+            case 4:
+                student.setImage4Url(url);
+                break;
+            case 5:
+                student.setImage5Url(url);
+                break;
+            case 6:
+                student.setImage6Url(url);
+                break;
+            case 7:
+                student.setImage7Url(url);
+                break;
+            case 8:
+                student.setImage8Url(url);
+                break;
+            case 9:
+                student.setImage9Url(url);
+                break;
+            case 10:
+                student.setImage10Url(url);
+                break;
             default:
-                throw new IllegalArgumentException("Image number not supported");
+                throw new IllegalArgumentException("Image number must be between 1 and 10");
         }
     }
 
@@ -175,7 +198,22 @@ public class StudentFileController {
                 return student.getImage1Url();
             case 2:
                 return student.getImage2Url();
-            // Add cases for image3 through image10
+            case 3:
+                return student.getImage3Url();
+            case 4:
+                return student.getImage4Url();
+            case 5:
+                return student.getImage5Url();
+            case 6:
+                return student.getImage6Url();
+            case 7:
+                return student.getImage7Url();
+            case 8:
+                return student.getImage8Url();
+            case 9:
+                return student.getImage9Url();
+            case 10:
+                return student.getImage10Url();
             default:
                 return null;
         }
