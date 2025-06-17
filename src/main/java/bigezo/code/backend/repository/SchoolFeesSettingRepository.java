@@ -17,7 +17,7 @@ public interface SchoolFeesSettingRepository extends JpaRepository<SchoolFeesSet
     @Query("SELECT s FROM SchoolFeesSetting s WHERE s.year = :year AND s.schoolAdmin.id = :schoolAdminId")
     List<SchoolFeesSetting> findByYearAndSchoolAdminId(@Param("year") int year, @Param("schoolAdminId") Long schoolAdminId);
 
-    @Query("SELECT s.id FROM SchoolFeesSetting s WHERE s.year = :year AND s.term = :term AND s.level = :level")
+    @Query("SELECT s.id FROM SchoolFeesSetting s WHERE s.year = :year AND s.term = :term AND s.level = :level AND s.schoolAdmin.id = :schoolAdminId")
     Long findByYearTermLevelSchoolAdminId(@Param("year") int year, @Param("term") int term, @Param("level") String level, @Param("schoolAdminId") Long schoolAdminId);
 
 }

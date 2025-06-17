@@ -1,8 +1,14 @@
-package bigezo.code.backend;
+package bigezo.code.backend.controller;
 
+import bigezo.code.backend.JwtUtil;
+import bigezo.code.backend.LoginRequest;
+import bigezo.code.backend.model.SchoolAdmin;
 import bigezo.code.backend.model.Student;
 import bigezo.code.backend.model.StudentLoginRequest;
+import bigezo.code.backend.model.User;
+import bigezo.code.backend.repository.SchoolAdminRepository;
 import bigezo.code.backend.repository.StudentRepository;
+import bigezo.code.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

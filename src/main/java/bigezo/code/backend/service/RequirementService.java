@@ -1,8 +1,8 @@
 package bigezo.code.backend.service;
 
-import bigezo.code.backend.SchoolAdmin;
-import bigezo.code.backend.SchoolAdminDto;
-import bigezo.code.backend.SchoolAdminRepository;
+import bigezo.code.backend.model.SchoolAdmin;
+import bigezo.code.backend.dto.SchoolAdminDto;
+import bigezo.code.backend.repository.SchoolAdminRepository;
 import bigezo.code.backend.model.Requirement;
 import bigezo.code.backend.model.RequirementDto;
 import bigezo.code.backend.repository.RequirementRepository;

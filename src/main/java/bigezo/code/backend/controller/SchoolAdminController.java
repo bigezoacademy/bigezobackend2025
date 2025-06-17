@@ -1,7 +1,7 @@
 package bigezo.code.backend.controller;
 
 
-import bigezo.code.backend.SchoolAdminDto;
+import bigezo.code.backend.dto.SchoolAdminDto;
 import bigezo.code.backend.service.SchoolAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

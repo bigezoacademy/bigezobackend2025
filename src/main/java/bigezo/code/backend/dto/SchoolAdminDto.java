@@ -1,4 +1,4 @@
-package bigezo.code.backend;
+package bigezo.code.backend.dto;
 
 public class SchoolAdminDto {
     private Long id;

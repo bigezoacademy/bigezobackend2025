@@ -1,6 +1,6 @@
 package bigezo.code.backend.model;
 
-import bigezo.code.backend.SchoolAdminDto;
+import bigezo.code.backend.dto.SchoolAdminDto;
 
 public class RequirementDto {
     private Long id;

@@ -1,6 +1,5 @@
 package bigezo.code.backend.model;
 
-import bigezo.code.backend.SchoolAdmin;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 

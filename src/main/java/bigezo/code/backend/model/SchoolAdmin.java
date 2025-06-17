@@ -1,4 +1,4 @@
-package bigezo.code.backend;
+package bigezo.code.backend.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,5 +1,7 @@
 package bigezo.code.backend;
 
+import bigezo.code.backend.model.User;
+import bigezo.code.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
