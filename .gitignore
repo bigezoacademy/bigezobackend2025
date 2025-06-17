@@ -33,6 +33,3 @@ build/
 .vscode/
 .env
 
-# Ignore application.properties and application.yml
-application.properties
-application.yml

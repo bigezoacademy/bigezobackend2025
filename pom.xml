@@ -11,7 +11,7 @@
 	<groupId>bigezo.code</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<name>backend</name>
 	<description>Back end code for Bigezo 2025</description>
 	<url/>
