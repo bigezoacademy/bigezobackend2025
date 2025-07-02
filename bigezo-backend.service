@@ -1,0 +1,20 @@
+[Unit]
+Description=Bigezo Backend Service
+After=syslog.target
+After=network.target
+
+[Service]
+User=deploy
+WorkingDirectory=/opt/bigezo/backend
+ExecStart=/usr/bin/java -jar /opt/bigezo/backend/target/backend-0.0.1-SNAPSHOT.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+
+# Environment variables
+Environment="SPRING_PROFILES_ACTIVE=production"
+# Add other environment variables here or use EnvironmentFile
+# EnvironmentFile=/etc/default/bigezo-backend
+
+[Install]
+WantedBy=multi-user.target
