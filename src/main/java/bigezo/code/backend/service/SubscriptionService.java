@@ -61,7 +61,7 @@ public class SubscriptionService {
         PaymentRequestDTO paymentRequest = new PaymentRequestDTO();
         paymentRequest.setId(UUID.randomUUID().toString()); // Generate a unique ID for merchant reference
         paymentRequest.setAmount(totalCost.doubleValue());
-        paymentRequest.setCurrency("KES"); // Or get from config
+        paymentRequest.setCurrency("UGX"); // Set currency to UGX
         paymentRequest.setDescription("Bigezo Subscription for " + schoolAdmin.getSchoolName());
         paymentRequest.setCallbackUrl("http://your-frontend.com/subscription/callback"); // This should be a configurable URL
         paymentRequest.setNotificationId(pesapalIpn); // Set the Pesapal IPN ID
