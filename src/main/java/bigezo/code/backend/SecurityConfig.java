@@ -77,6 +77,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/files/schools/{schoolId}/delete/{fileName}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/files/schools/{schoolId}/list").hasAnyRole("USER", "ADMIN")
 
+                        // Dashboard API (Authenticated users)
+                        .requestMatchers(HttpMethod.GET, "/api/dashboard").authenticated()
+
                         // Catch-all for authenticated requests
                         .anyRequest().authenticated()
                 )

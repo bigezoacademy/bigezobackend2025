@@ -20,4 +20,11 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Optional<Student> findByIdAndSchoolAdminId(Long id, Long schoolAdminId);
     Student findByStudentNumber(String studentNumber);
+    Long countBySchoolAdminId(Long schoolAdminId);
+
+    @Query("SELECT COUNT(s) FROM Student s WHERE s.schoolAdmin.id = :schoolAdminId AND s.year = :year")
+    Long countStudentsByYearAndSchoolAdminId(@Param("schoolAdminId") Long schoolAdminId, @Param("year") int year);
+
+    @Query("SELECT COUNT(s) FROM Student s WHERE s.schoolAdmin.id = :schoolAdminId AND s.gender = :gender AND s.year = :year")
+    Long countByGenderAndYearAndSchoolAdminId(@Param("schoolAdminId") Long schoolAdminId, @Param("gender") String gender, @Param("year") int year);
 }

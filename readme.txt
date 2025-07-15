@@ -1,248 +1,62 @@
-<!-- Subscription Status Banner -->
-<div class="alert alert-info mb-3" *ngIf="subscriptionStatus === 'free'">
-  <strong>Free Tier:</strong> Upgrade to unlock analytics and premium features!
-</div>
-<div class="alert alert-success mb-3" *ngIf="subscriptionStatus === 'standard'">
-  <strong>Standard Tier:</strong> Analytics enabled. Upgrade for more features!
-</div>
-<div class="alert alert-warning mb-3" *ngIf="subscriptionStatus === 'premium'">
-  <strong>Premium Tier:</strong> All features unlocked!
-</div>
-
-<!-- Analytics Section (Feature Gated) -->
-<section *ngIf="isAnalyticsEnabled; else lockedAnalytics">
-  <h2 class="mb-4">School Analytics</h2>
-  <div class="row">
-    <div class="col-md-6 mb-4">
-      <canvas
-        baseChart
-        [data]="performanceChartData"
-        [options]="performanceChartOptions"
-        chartType="line"
-      >
-      </canvas>
-      <button
-        class="btn btn-outline-primary mt-2"
-        (click)="downloadChart(performanceChart, 'performance')"
-      >
-        Download Performance Chart
-      </button>
-    </div>
-    <div class="col-md-6 mb-4">
-      <canvas
-        baseChart
-        [data]="genderChartData"
-        [options]="genderChartOptions"
-        chartType="line"
-      >
-      </canvas>
-      <button
-        class="btn btn-outline-primary mt-2"
-        (click)="downloadChart(genderChart, 'gender')"
-      >
-        Download Gender Chart
-      </button>
-    </div>
-  </div>
-</section>
-<ng-template #lockedAnalytics>
-  <div class="card p-4 text-center bg-light border">
-    <h3 class="text-muted">Analytics Locked</h3>
-    <p>Upgrade your subscription to access school analytics and insights.</p>
-  </div>
-</ng-template>
-<div class="container my-4">
-  <div class="row mb-4">
-    <div class="col-12 text-left">
-      <h1
-        class="mb-3 text-danger"
-        style="font-family: inherit; font-weight: 700; letter-spacing: 2px"
-      >
-        <span
-          style="
-            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-          "
-          >Analytics</span
-        >
-      </h1>
-    </div>
-  </div>
-
-  <!-- Summary Cards Section (Adobe Cloud Inspired) -->
-  <div class="row text-center mb-4 g-4">
-    <div class="col-md-3">
-      <div
-        class="card shadow-lg border-0"
-        style="
-          background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-          color: #fff;
-        "
-      >
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <span><i class="bi bi-wallet2" style="font-size: 2rem"></i></span>
-            <span
-              class="badge bg-light text-success rounded-pill"
-              style="font-size: 1.2rem"
-              >UGX 743,000,000</span
-            >
-          </div>
-          <h5 class="card-title mb-0" style="font-family: inherit">
-            Requirements Revenue
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div
-        class="card shadow-lg border-0"
-        style="
-          background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-          color: #fff;
-        "
-      >
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <span
-              ><i class="bi bi-people-fill" style="font-size: 2rem"></i
-            ></span>
-            <span
-              class="badge bg-light text-secondary rounded-pill"
-              style="font-size: 1.2rem"
-              >UGX 122,330,000</span
-            >
-          </div>
-          <h5 class="card-title mb-0" style="font-family: inherit">
-            Alumni Contributions
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div
-        class="card shadow-lg border-0"
-        style="
-          background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-          color: #fff;
-        "
-      >
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <span
-              ><i class="bi bi-person-check" style="font-size: 2rem"></i
-            ></span>
-            <span
-              class="badge bg-light text-success rounded-pill"
-              style="font-size: 1.2rem"
-              >2,250</span
-            >
-          </div>
-          <h5 class="card-title mb-0" style="font-family: inherit">
-            Students Registered
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div
-        class="card shadow-lg border-0"
-        style="
-          background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-          color: #fff;
-        "
-      >
-        <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <span
-              ><i class="bi bi-graph-up-arrow" style="font-size: 2rem"></i
-            ></span>
-            <span
-              class="badge bg-light text-success rounded-pill"
-              style="font-size: 1.2rem"
-              >423</span
-            >
-          </div>
-          <h5 class="card-title mb-0" style="font-family: inherit">
-            School Fees Defaulters
-          </h5>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 📊 Charts Section -->
-  <div class="row g-4">
-    <!-- 🏫 Student Performance Chart -->
-    <div class="col-md-6">
-      <div
-        class="card shadow-lg border-0"
-        style="background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%)"
-      >
-        <div class="card-body">
-          <h5
-            class="text-center mb-3"
-            style="font-family: inherit; color: #330867"
-          >
-            Students Registered
-          </h5>
-          <div class="text-center mb-2">
-            <button
-              class="btn btn-secondary graphbtn"
-              (click)="downloadChart(performanceChart, 'registration')"
-            >
-              Download Registration Chart <i class="bi bi-download ms-1"></i>
-            </button>
-          </div>
-          <canvas
-            baseChart
-            [data]="performanceChartData"
-            [options]="performanceChartOptions"
-            chartType="line"
-          >
-          </canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- 🚹🚺 Boys vs Girls Chart -->
-    <div class="col-md-6">
-      <div
-        class="card shadow-lg border-0"
-        style="background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%)"
-      >
-        <div class="card-body">
-          <h5
-            class="text-center mb-3"
-            style="font-family: inherit; color: #fff"
-          >
-            Boys vs Girls Enrollment
-          </h5>
-          <div class="text-center mb-2">
-            <button
-              class="btn btn-light graphbtn"
-              (click)="downloadChart(genderChart, 'gender')"
-            >
-              Download Gender Chart <i class="bi bi-download ms-1"></i>
-            </button>
-          </div>
-          <canvas
-            baseChart
-            [data]="genderChartData"
-            [options]="genderChartOptions"
-            chartType="line"
-          >
-          </canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Subscription Section -->
-  <div class="row mb-4">
-    <div class="col-12">
-      <app-subscription></app-subscription>
-    </div>
-  </div>
-</div>
+2025-07-15T16:19:07.127+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Processing payment request: bigezo.code.backend.dto.PaymentRequestDTO@44fb8f99
+2025-07-15T16:19:07.127+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Attempting to authenticate with Pesapal...
+2025-07-15T16:19:07.127+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Token expired or not set, refreshing...
+2025-07-15T16:19:09.406+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Successfully obtained Pesapal access token response: {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3VzZXJkYXRhIjoiYjc5MmYzY2ItMzgyOC00MThiLWE2YmUtZGM0YjAxODE4NzU2IiwidWlkIjoidk5iZVRoVFZoRmw5QkNNZzdrU0tPRENDeG5Id0dEYmEiLCJuYmYiOjE3NTI1ODU1NDksImV4cCI6MTc1MjU4NTg0OSwiaWF0IjoxNzUyNTg1NTQ5LCJpc3MiOiJodHRwOi8vcGF5LnBlc2FwYWwuY29tLyIsImF1ZCI6Imh0dHA6Ly9wYXkucGVzYXBhbC5jb20vIn0.U7stbuNxOwCHU1Xn11mIfVoF-kX6AdKMcnGSOWUJueE","expiryDate":"2025-07-15T13:24:09.222388Z","error":null,"status":"200","message":"Request processed successfully"}
+2025-07-15T16:19:09.406+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Amount being sent to Pesapal: 500.0
+2025-07-15T16:19:09.413+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : JSON payload sent to Pesapal: {"schoolAdminId":null,"studentId":null,"id":"e4dcc188-4b5f-4c1b-b8f4-47b290a3387d","currency":"KES","amount":500.0,"description":"Bigezo Subscription for Elohim Primary School","callback_url":"http://your-frontend.com/subscription/callback","redirect_mode":null,"notification_id":"5bbe0e70-32aa-4204-b00b-dc4bd606fa7f","branch":null,"billing_address":{"schoolAdminId":null,"studentId":null,"email_address":"elohim.primary@example.com","phone_number":"+256771234567","country_code":"UG","first_name":"Sarah","middle_name":"N","last_name":null,"line_1":null,"line_2":null,"city":null,"state":null,"postal_code":null,"zip_code":null}}
+2025-07-15T16:19:15.271+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Payment response received: {"order_tracking_id":"32f25cab-63ff-4b0d-a4d5-db91669c7699","merchant_reference":"e4dcc188-4b5f-4c1b-b8f4-47b290a3387d","redirect_url":"https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=32f25cab-63ff-4b0d-a4d5-db91669c7699","error":null,"status":"200"}
+2025-07-15T16:19:15.276+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Payment response received: bigezo.code.backend.model.PaymentResponse@743a6ba5
+2025-07-15T16:19:15.276+03:00  INFO 21992 --- [bigezo-backend] [nio-8080-exec-8] b.code.backend.service.PaymentService    : Payment successfully processed
+2025-07-15T16:19:15.276+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1740986443<open>)] for JPA transaction
+2025-07-15T16:19:15.276+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Creating new transaction with name [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-07-15T16:19:15.276+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.t.internal.TransactionImpl         : begin
+2025-07-15T16:19:15.277+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@63b56781]
+2025-07-15T16:19:15.277+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.j.internal.PersistenceUnitUtilImpl   : jakarta.persistence.PersistenceUnitUtil.getIdentifier is only intended to work with enhanced entities (although Hibernate also adapts this support to its proxies); however the passed entity was not enhanced (nor a proxy).. may not be able to read identifier
+2025-07-15T16:19:15.299+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] org.hibernate.engine.spi.ActionQueue     : Executing identity-insert immediately
+2025-07-15T16:19:15.304+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] org.hibernate.SQL                        : insert into payment_statuses (amount,billing_address,branch,callback_url,created_at,currency,description,error,merchant_reference,notification_id,order_tracking_id,payment_id,payment_status,redirect_url,school_admin_id,status,student_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+Hibernate: insert into payment_statuses (amount,billing_address,branch,callback_url,created_at,currency,description,error,merchant_reference,notification_id,order_tracking_id,payment_id,payment_status,redirect_url,school_admin_id,status,student_id,updated_at) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+2025-07-15T16:19:15.337+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] org.hibernate.orm.results                : Initializer list is empty
+2025-07-15T16:19:15.337+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.id.IdentifierGeneratorHelper         : Extracted generated values [bigezo.code.backend.model.PaymentStatus]: [Ljava.lang.Object;@349c65a2
+2025-07-15T16:19:15.340+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Initiating transaction commit
+2025-07-15T16:19:15.340+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Committing JPA transaction on EntityManager [SessionImpl(1740986443<open>)]
+2025-07-15T16:19:15.340+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.t.internal.TransactionImpl         : committing
+2025-07-15T16:19:15.340+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Processing flush-time cascades
+2025-07-15T16:19:15.341+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Dirty checking collections
+2025-07-15T16:19:15.345+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Flushed: 0 insertions, 0 updates, 0 deletions to 4 objects
+2025-07-15T16:19:15.346+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Flushed: 0 (re)creations, 0 updates, 0 removals to 0 collections
+2025-07-15T16:19:15.346+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : Listing entities:
+2025-07-15T16:19:15.346+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.Pricing{features=["Basic Student Management", "Attendance Tracking", "Fee Collection", "Basic
+     Reporting"], tier=standard, costPerStudent=500.00, id=2}
+2025-07-15T16:19:15.346+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.SchoolAdmin{adminUsername=elohim, role=admin, adminPhone=0781584927, uniqueCode=elo, district=Kaberamaido, id=1, schoolName=Elohim Primary School, adminEmail=ochalfie@gmail.com, adminPassword=$2a$10$uMJ9DHbGFPzUF6gugR0E/O/K0udoklije.VqLP/kTCk3yOP3gCpJe}
+2025-07-15T16:19:15.346+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.PaymentStatus{amount=null, orderTrackingId=null, redirectUrl=https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=32f25cab-63ff-4b0d-a4d5-db91669c7699, description=null, error=null, branch=null, studentId=0, createdAt=2025-07-15T16:19:15.294090500, schoolAdminId=0, paymentId=e4dcc188-4b5f-4c1b-b8f4-47b290a3387d, callbackUrl=null, currency=null, notificationId=32f25cab-63ff-4b0d-a4d5-db91669c7699, id=9, billingAddress=null, merchantReference=e4dcc188-4b5f-4c1b-b8f4-47b290a3387d, paymentStatus=null, status=started, updatedAt=2025-07-15T16:19:15.294090500}
+2025-07-15T16:19:15.347+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.BillingAddress{lastName=Ademu, zipCode=00256, city=Kampala, postalCode=00256, studentId=null, firstName=Sarah, emailAddress=elohim.primary@example.com, phoneNumber=+256771234567, schoolAdminId=1, countryCode=UG, middleName=N, id=1, state=Central Region, line2=Kireka, line1=Plot 123, School Road}
+2025-07-15T16:19:15.356+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Not closing pre-bound JPA EntityManager after transaction
+2025-07-15T16:19:15.357+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Found thread-bound EntityManager [SessionImpl(1740986443<open>)] for JPA transaction
+2025-07-15T16:19:15.358+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Creating new transaction with name [org.springframework.data.jpa.repository.support.SimpleJpaRepository.save]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+2025-07-15T16:19:15.358+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.t.internal.TransactionImpl         : begin
+2025-07-15T16:19:15.358+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Exposing JPA transaction as JDBC [org.springframework.orm.jpa.vendor.HibernateJpaDialect$HibernateConnectionHandle@128e15d5]
+2025-07-15T16:19:15.358+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.j.internal.PersistenceUnitUtilImpl   : jakarta.persistence.PersistenceUnitUtil.getIdentifier is only intended to work with enhanced entities (although Hibernate also adapts this support to its proxies); however the passed entity was not enhanced (nor a proxy).. may not be able to read identifier
+2025-07-15T16:19:15.358+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] org.hibernate.engine.spi.ActionQueue     : Executing identity-insert immediately
+2025-07-15T16:19:15.358+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] org.hibernate.SQL                        : insert into subscriptions (cost_per_student,end_date,number_of_students,payment_status,school_admin_id,start_date,subscription_type,total_cost,transaction_id) values (?,?,?,?,?,?,?,?,?)
+Hibernate: insert into subscriptions (cost_per_student,end_date,number_of_students,payment_status,school_admin_id,start_date,subscription_type,total_cost,transaction_id) values (?,?,?,?,?,?,?,?,?)
+2025-07-15T16:19:15.367+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] org.hibernate.orm.results                : Initializer list is empty
+2025-07-15T16:19:15.367+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.id.IdentifierGeneratorHelper         : Extracted generated values [bigezo.code.backend.model.Subscription]: [Ljava.lang.Object;@11e10960
+2025-07-15T16:19:15.367+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Initiating transaction commit
+2025-07-15T16:19:15.367+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Committing JPA transaction on EntityManager [SessionImpl(1740986443<open>)]
+2025-07-15T16:19:15.367+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.t.internal.TransactionImpl         : committing
+2025-07-15T16:19:15.368+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Processing flush-time cascades
+2025-07-15T16:19:15.368+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Dirty checking collections
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Flushed: 0 insertions, 0 updates, 0 deletions to 5 objects
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.h.e.i.AbstractFlushingEventListener    : Flushed: 0 (re)creations, 0 updates, 0 removals to 0 collections
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : Listing entities:
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.Pricing{features=["Basic Student Management", "Attendance Tracking", "Fee Collection", "Basic
+     Reporting"], tier=standard, costPerStudent=500.00, id=2}
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.SchoolAdmin{adminUsername=elohim, role=admin, adminPhone=0781584927, uniqueCode=elo, district=Kaberamaido, id=1, schoolName=Elohim Primary School, adminEmail=ochalfie@gmail.com, adminPassword=$2a$10$uMJ9DHbGFPzUF6gugR0E/O/K0udoklije.VqLP/kTCk3yOP3gCpJe}
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.PaymentStatus{amount=null, orderTrackingId=null, redirectUrl=https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=32f25cab-63ff-4b0d-a4d5-db91669c7699, description=null, error=null, branch=null, studentId=0, createdAt=2025-07-15T16:19:15.294090500, schoolAdminId=0, paymentId=e4dcc188-4b5f-4c1b-b8f4-47b290a3387d, callbackUrl=null, currency=null, notificationId=32f25cab-63ff-4b0d-a4d5-db91669c7699, id=9, billingAddress=null, merchantReference=e4dcc188-4b5f-4c1b-b8f4-47b290a3387d, paymentStatus=null, status=started, updatedAt=2025-07-15T16:19:15.294090500}
+2025-07-15T16:19:15.369+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.BillingAddress{lastName=Ademu, zipCode=00256, city=Kampala, postalCode=00256, studentId=null, firstName=Sarah, emailAddress=elohim.primary@example.com, phoneNumber=+256771234567, schoolAdminId=1, countryCode=UG, middleName=N, id=1, state=Central Region, line2=Kireka, line1=Plot 123, School Road}
+2025-07-15T16:19:15.370+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.hibernate.internal.util.EntityPrinter  : bigezo.code.backend.model.Subscription{endDate=2026-07-15, subscriptionType=PAID, costPerStudent=500.00, id=9, numberOfStudents=1, paymentStatus=PENDING, startDate=2025-07-15, totalCost=500.00, transactionId=32f25cab-63ff-4b0d-a4d5-db91669c7699, schoolAdmin=bigezo.code.backend.model.SchoolAdmin#1}
+2025-07-15T16:19:15.377+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.orm.jpa.JpaTransactionManager        : Not closing pre-bound JPA EntityManager after transaction
+2025-07-15T16:19:15.377+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [application/json, text/plain, */*] and supported [text/plain, */*, application/json, application/*+json, application/cbor]
+2025-07-15T16:19:15.377+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing ["https://pay.pesapal.com/iframe/PesapalIframe3/Index?OrderTrackingId=32f25cab-63ff-4b0d-a4d5-db91669c (truncated)..."]
+2025-07-15T16:19:15.379+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.j.s.OpenEntityManagerInViewInterceptor : Closing JPA EntityManager in OpenEntityManagerInViewInterceptor
+2025-07-15T16:19:15.379+03:00 DEBUG 21992 --- [bigezo-backend] [nio-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK

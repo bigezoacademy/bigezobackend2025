@@ -174,7 +174,9 @@ public class PaymentService {
 
         try {
             // Make payment request
+            logger.info("Amount being sent to Pesapal: {}", payment.getAmount());
             String requestBody = objectMapper.writeValueAsString(payment);
+            logger.info("JSON payload sent to Pesapal: {}", requestBody);
             RequestBody body = RequestBody.create(requestBody, MediaType.parse("application/json"));
 
             Request request = new Request.Builder()
