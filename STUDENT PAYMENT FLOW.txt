@@ -1,0 +1,123 @@
+ Based on the analysis of your code, here is a detailed, step-by-step technical breakdown of how a
+  student pays their school fees through your application.
+
+
+  This process involves three main actors:
+   1. The Frontend: The student's user interface (likely a web or mobile app).
+   2. Your Backend Application: The Spring Boot code we've been discussing.
+   3. Pesapal: The external payment gateway.
+
+  Here is the likely process flow:
+
+
+  Step 1: Student Authentication
+   * Action: The student logs into the application.
+   * Frontend: The student enters their studentNumber and password. The frontend sends this to your backend.
+   * Backend API Call: POST /auth/student-login
+       * Controller: AuthController
+       * Logic: The backend verifies the student's credentials against the Student and User tables. If
+         successful, it generates a JWT (JSON Web Token).
+   * Response: The backend returns the JWT, along with essential data like studentId, schoolAdminId, firstName,
+     and lastName. The frontend stores this information for subsequent requests.
+
+
+  Step 2: Fetching Fee Information
+   * Action: The student navigates to the "Pay Fees" section of the application.
+   * Frontend: To display the correct fee amount, the frontend needs to know the student's level, the current
+     year, and term. It uses the schoolAdminId obtained during login to query for the fee structure.
+   * Backend API Call: GET /api/school-fees-settings/find-by-year-term-level-and-admin
+       * Controller: SchoolFeesSettingController
+       * Logic: This endpoint queries the database to find the SchoolFeesSetting that matches the student's
+         current academic context (e.g., Form 2, Term 3, 2025 for a specific school). This setting record
+         contains the total amount due.
+   * Response: The backend returns the SchoolFeesSetting object, which includes the total fee amount. The
+     frontend can now display this to the student.
+
+
+  Step 3: Initiating the Payment with Pesapal
+  This is a two-part process on the backend.
+   * Action: The student confirms the amount and clicks "Pay Now".
+   * Frontend: The frontend gathers all necessary information for the payment: amount, currency, description
+     (e.g., "School Fees Payment"), and the student's billing details (emailAddress, phoneNumber, etc.).
+   * Backend API Call: POST /api/payments
+       * Controller: PaymentController
+       * Service: PaymentService.makePayment
+       * Internal Logic:
+           1. Get Pesapal Auth Token: Before submitting the payment, your PaymentService first needs to
+              authenticate with Pesapal. It calls the pesapalService.getJwtToken() method, which internally makes
+              a request to POST /api/pesapal/request-token. This provides a short-lived bearer token required for
+              the next step.
+           2. Submit Order to Pesapal: The PaymentService then makes an HTTP request to the Pesapal API to submit
+              the payment order. It sends the payment details (amount, description, etc.) and a callbackUrl. This
+              callback URL is a page in your frontend application where the user will be sent after completing the
+               payment (e.g., https://yourschool.com/payment-complete).
+   * Response: Pesapal's API responds to your backend with a unique order_tracking_id and a redirect_url. Your
+     backend then sends this redirect_url back to the frontend.
+
+
+  Step 4: Student Completes Payment
+   * Action: The student is redirected to the secure Pesapal payment page.
+   * Frontend: The browser is automatically redirected to the redirect_url received from your backend.
+   * Pesapal: The student sees the Pesapal payment interface and completes the payment using their preferred
+     method (e.g., M-Pesa, Card).
+
+
+  Step 5: Payment Verification
+   * Action: After the student pays, Pesapal redirects them back to your application.
+   * Frontend: The browser is sent to the callbackUrl you specified in Step 3. Pesapal includes the
+     orderTrackingId in the URL as a query parameter. The frontend now has the tracking ID.
+   * Backend API Call: GET /api/pesapal/transaction-status?orderTrackingId={orderTrackingId}
+       * Controller: PesapalController
+       * Service: PesapalService.getTransactionStatus
+       * Logic: Your backend takes the orderTrackingId and makes a secure, server-to-server request to Pesapal
+         to get the definitive status of the transaction (COMPLETED, FAILED, or PENDING). This is a critical
+         security step to prevent tampering.
+   * Response: The backend returns the full transaction status details to the frontend.
+
+
+  Step 6: Recording the Transaction
+   * Action: The frontend confirms the payment was successful and records it in the local database.
+   * Frontend: After receiving a COMPLETED status from your backend in the previous step, the frontend makes one
+     final call to save the transaction details permanently.
+   * Backend API Call: POST /api/transactions
+       * Controller: TransactionController
+       * Service: TransactionService.createTransaction
+       * Logic: The backend creates a new record in the Transaction table, linking the studentId, schoolAdminId,
+         the amount paid, the Pesapal orderTrackingId, and the final status.
+   * Response: The backend confirms that the transaction has been successfully saved. The student can now be
+     shown a success message and their updated fee balance.
+
+  Summary Flow
+
+
+    1 Frontend          Backend                  Pesapal
+    2    |                 |                        |
+    3    |---Login--->(AuthController)------------>|
+    4    |<--JWT, IDs------|                        |
+    5    |                 |                        |
+    6    |---Get Fees--> (SchoolFeesSettingController) |
+    7    |<--Fee Amount----|                        |
+    8    |                 |                        |
+    9    |---Pay Fees--->(PaymentController)-------->|
+   10    |                 |                        |
+   11    |                 |---Get Auth Token------>|
+   12    |                 |<--Pesapal Token--------|
+   13    |                 |                        |
+   14    |                 |---Submit Order-------->|
+   15    |                 |<--Redirect URL, ID-----|
+   16    |                 |                        |
+   17    |<--Redirect URL--|                        |
+   18    |---Redirect to Pesapal------------------->|
+   19    |                 |                        |
+   20    |  (Student Pays on Pesapal Page)          |
+   21    |<------------------Redirect from Pesapal--| (with tracking ID)
+   22    |                 |                        |
+   23    |---Get Status--> (PesapalController)------>|
+   24    |                 |---Verify Status------->|
+   25    |                 |<--Final Status---------|
+   26    |<--Final Status--|                        |
+   27    |                 |                        |
+   28    |---Save Tx----->(TransactionController)-->|
+   29    |<--Tx Saved------|                        |
+   30    |                 |                        |
+
