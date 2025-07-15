@@ -18,12 +18,16 @@ public class Pricing {
     @Column(nullable = false)
     private BigDecimal costPerStudent;
 
+    @Column(columnDefinition = "TEXT") // Use TEXT for potentially long JSON strings
+    private String features; // Stores features as a JSON string
+
     public Pricing() {
     }
 
-    public Pricing(String tier, BigDecimal costPerStudent) {
+    public Pricing(String tier, BigDecimal costPerStudent, String features) {
         this.tier = tier;
         this.costPerStudent = costPerStudent;
+        this.features = features;
     }
 
     public Long getId() {
@@ -48,5 +52,13 @@ public class Pricing {
 
     public void setCostPerStudent(BigDecimal costPerStudent) {
         this.costPerStudent = costPerStudent;
+    }
+
+    public String getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(String features) {
+        this.features = features;
     }
 }

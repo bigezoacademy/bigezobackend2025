@@ -19,7 +19,7 @@ public class PricingController {
     }
 
     @PostMapping
-    public ResponseEntity<Pricing> setPricing(@RequestParam String tierName, @RequestParam BigDecimal costPerStudent) {
+    public ResponseEntity<Pricing> setPricing(@RequestParam String tierName, @RequestParam BigDecimal costPerStudent, @RequestParam(required = false) String features) {
         Optional<Pricing> existingPricing = pricingRepository.findByTier(tierName);
         Pricing pricing;
         if (existingPricing.isPresent()) {
@@ -30,6 +30,7 @@ public class PricingController {
             pricing.setTier(tierName); // Set the tier name
             pricing.setCostPerStudent(costPerStudent);
         }
+        pricing.setFeatures(features); // Set the features
         pricingRepository.save(pricing);
         return ResponseEntity.ok(pricing);
     }
