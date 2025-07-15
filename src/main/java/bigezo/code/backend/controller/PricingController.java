@@ -33,4 +33,9 @@ public class PricingController {
         pricingRepository.save(pricing);
         return ResponseEntity.ok(pricing);
     }
+
+    @GetMapping
+    public ResponseEntity<java.util.List<Pricing>> getAllPricingPackages() {
+        return ResponseEntity.ok(pricingRepository.findAll());
+    }
 }
