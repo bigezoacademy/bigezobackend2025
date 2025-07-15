@@ -33,6 +33,9 @@ public class SubscriptionService {
     @Value("${pesapal.ipn}")
     private String pesapalIpn;
 
+    @Value("${pesapal.success.url}")
+    private String pesapalSuccessUrl;
+
     public SubscriptionService(SubscriptionRepository subscriptionRepository, PricingRepository pricingRepository, SchoolAdminRepository schoolAdminRepository, PaymentService paymentService, ObjectMapper objectMapper, BillingAddressRepository billingAddressRepository) {
         this.subscriptionRepository = subscriptionRepository;
         this.pricingRepository = pricingRepository;
@@ -63,7 +66,7 @@ public class SubscriptionService {
         paymentRequest.setAmount(totalCost.doubleValue());
         paymentRequest.setCurrency("UGX"); // Set currency to UGX
         paymentRequest.setDescription("Bigezo Subscription for " + schoolAdmin.getSchoolName());
-        paymentRequest.setCallbackUrl("http://your-frontend.com/subscription/callback"); // This should be a configurable URL
+        paymentRequest.setCallbackUrl(pesapalSuccessUrl); // Use the configurable URL
         paymentRequest.setNotificationId(pesapalIpn); // Set the Pesapal IPN ID
 
         // Fetch billing address and set it in the paymentRequest
